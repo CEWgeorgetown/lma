@@ -1,0 +1,25 @@
+body {
+    font-size: small;
+}
+
+.nav-link {
+    border-top-width: medium !important;
+    border-color: darkgray !important;
+}
+
+#list_cbsa {
+    height: 100px;
+    overflow-y: auto;
+}
+
+#list_occ {
+    height: 100px;
+    overflow-y: auto;
+}
+
+#chart {
+    max-width: 600px;
+    min-width: 320px;
+    height: 800px;
+    margin: 0 auto;
+}
