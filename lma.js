@@ -419,9 +419,17 @@ $(document).ready(function () {
       chartData = GetChartData(cbsa, 1);
       drawChart(chartData[1], chartData[0]);
     }
+    else if (update == 1) {
+      chartData = GetChartData(cbsa, 1);
+      drawChart(chartData[1], chartData[0]);
+    }
   });
   $("#radio_chart_shortage").on('click', function () {
     if (update == 0) {
+      chartData = GetChartData(cbsa, 2);
+      drawChart(chartData[1], chartData[0], 'Shortage by occupation', 2);
+    }
+    else if (update == 1) {
       chartData = GetChartData(cbsa, 2);
       drawChart(chartData[1], chartData[0], 'Shortage by occupation', 2);
     }
@@ -502,7 +510,7 @@ $(document).ready(function () {
   $("#btn_update").on("click", function () {
     update = 1;
     // Check status of radio button
-    $("input[type=radio]:checked").each(function () {
+    $("input[name=flexRadiocbsa]:checked").each(function () {
       // console.log($(this).val());
       val_ratio = $(this).val();
     });
@@ -549,7 +557,6 @@ $(document).ready(function () {
         return (obj.inc1 == 0 && obj.inc2 == 0);
       });
     }
-    // inst_subset = inst;
 
     displayCBSA(cbsa_subset);
     if (val_ratio != "2" && tab_cert == 1) {
