@@ -41,11 +41,11 @@ th[colspan]:not([colspan="1"]) {
 }
 
 .dataTables_length {
-    /* float: right !important; */
-    position: absolute;
+    float: right !important;
+    /* position: absolute;
     top: 2%;
     left: 30%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
 }
 
 .nav-link:hover {
