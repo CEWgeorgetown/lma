@@ -130,13 +130,13 @@ var allinst = [
     render: $.fn.dataTable.render.number(',', '.', 0)
   },
   {
-    "data": "pocc",
+    "data": "pcbsa",
     render: function (data, type, row) {
       return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + '%';
     }
   },
   {
-    "data": "pcbsa",
+    "data": "pocc",
     render: function (data, type, row) {
       return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + '%';
     }
@@ -180,19 +180,19 @@ var noshortageinst = [
     render: $.fn.dataTable.render.number(',', '.', 0)
   },
   {
-    "data": "pocc",
+    "data": "pcbsa",
     render: function (data, type, row) {
       return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + '%';
     }
   },
   {
-    "data": "pcbsa",
+    "data": "pocc",
     render: function (data, type, row) {
       return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + '%';
     }
   }
 ]
-function displayInst(d, showcolumns = allinst, div = '#table-inst') {
+function displayInst(d, showcolumns = allinst, div = '#table-inst', ol = [4, 7, 10, 12]) {
   $(div).DataTable({
     initComplete: function () {
       this.api().columns([0, 1, 2, 3]).every(function () {
@@ -220,10 +220,19 @@ function displayInst(d, showcolumns = allinst, div = '#table-inst') {
       });
     },
     // dom: 'Bfrtip',
+    // dom: '<"top"fl>rt<"bottom"ip><"clear">',
     // buttons: ['excelHtml5', 'csv', 'pdf'],
-    fixedColumns: {
-      left: 4
-    },
+    columnDefs: [{
+      targets: ol,
+      className: "outlined-left"
+    }],
+    // fixedColumns: {
+    //   leftColumns: 4
+    // },
+    // paging: true,
+    // scrollCollapse: true,
+    // scrollX: true,
+    // scrollY: 300,
     pageLength: 10,
     deferRender: true,
     processing: true,
@@ -249,11 +258,11 @@ function GetChartData(data, varval) {
   });
   xcat = xcat.filter((val, ind, arr) => arr.indexOf(val) === ind);
   var occupationCategories = {
-    'Management': { name: 'Management', data: [] },
     'Blue-collar': { name: 'Blue-collar', data: [] },
     'Health': { name: 'Health', data: [] },
-    'STEM': { name: 'STEM', data: [] },
-    'Personal services': { name: 'Personal services', data: [] }
+    'Management': { name: 'Management', data: [] },
+    'Personal services': { name: 'Personal services', data: [] },
+    'STEM': { name: 'STEM', data: [] }
   };
   $.each(data, function (i, value) {
     var category = occupationCategories[value.Occ];
@@ -273,30 +282,68 @@ function GetChartData(data, varval) {
   });
   return [xcat, (Object.values(occupationCategories))]
 };
-function drawChart(data = cbsa, xcat, ttl = "Alignment ratio by occupation", ttype = 1) {
-
+function drawChart(data = cbsa, xcat, ttype = 1, h = 5000) {
+  var refLine = [{
+    color: '#000000',
+    zIndex: 5,
+    width: 2,
+    value: 1
+  }];
+  var anno = [{
+    labelOptions: {
+      overflow: 'none',
+      backgroundColor: 'white',
+      distance: 5,
+      shape: 'connector'
+    },
+    labels: [{
+      point: {
+        x: -0.4,
+        y: 1,
+        xAxis: 0,
+        yAxis: 0
+      },
+      text: 'No shortage'
+    }]
+  }]
   if (ttype == 1) {
-    pf = '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>'
-  } else {
-    pf = '<td style="padding:0"><b>{point.y}</b></td></tr>'
+    ref = refLine;
+    ann = anno;
+    ttl = "Alignment ratio by occupation";
+    pf = '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>';
+    yf = '{value: , .1f}';
+    ya = 'Alignment ratio';
   }
+  else if (ttype == 2) {
+    ttl = "Shortage by occupation";
+    ann = null;
+    ref = null;
+    pf = '<td style="padding:0"><b>{point.y}</b></td></tr>';
+    yf = '{value: , .0f}';
+    ya = 'Shortage';
+  };
+
   $("#chart").highcharts({
     title: {
       text: ttl
     },
     chart: {
       type: 'bar',
+      // marginTop: 150,
       scrollablePlotArea: {
-        minHeight: 5000,
+        minHeight: h,
         scrollPositionX: 1,
       }
     },
     yAxis: {
       title: {
-        text: 'Alignment ratio'
+        text: ya
       },
+      offset: 5,
+      opposite: true,
+      plotLines: ref,
       labels: {
-        format: '{value: , .0f}'
+        format: yf
       }
     },
     xAxis: {
@@ -318,20 +365,25 @@ function drawChart(data = cbsa, xcat, ttl = "Alignment ratio by occupation", tty
       useHTML: true
     },
     legend: {
-      enabled: true
+      enabled: true,
+      verticalAlign: 'top'
     },
     credits: {
       enabled: false
     },
+    annotations: ann,
     plotOptions: {
       bar: {
-        // // pointWidth: 15,
-        // // pointPadding: 0,
+        // pointWidth: 5,
+        // pointPadding: 0.1,
         groupPadding: 0.1
       },
       series: {
         dataLabels: {
           enabled: true,
+          allowOverlap: true,
+          crop: false,
+          overflow: "allow",
           formatter: function () {
             if (ttype == 1) {
               return Highcharts.numberFormat(Math.round(this.y * 100) / 100, 2);
@@ -369,8 +421,13 @@ function getDataByOcc(occvars) {
   });
   return cbsa_subset;
 }
-
+// generic comparison function
+var cmp = function (x, y) {
+  return x > y ? 1 : x < y ? -1 : 0;
+};
 $(document).ready(function () {
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
   // fetch('cbsal.json')
   //   .then(response => response.json())
   //   .then(cbsa => console.log(cbsa))
@@ -383,12 +440,20 @@ $(document).ready(function () {
   var tab_cert = 1;
   var tab_inst = 0;
   var updateChart = [];
+  var radio_align = 1;
+  var radio_shortage = 0;
   // Filter out institutions that do not produce awards for an occupation
   inst = inst.filter(obj => {
-    return obj.pcbsa > 0
+    return obj.pocc > 0
   });
   // dynamically sort and fill dropdown for CBSA
   cbsa.sort((a, b) => a.cbsa_name > b.cbsa_name);
+  // cbsa.sort(function (a, b) {
+  //   return cmp(
+  //     [cmp(a.cbsa_name, b.cbsa_name), -cmp(a.Occ, b.Occ)],
+  //     [cmp(b.cbsa_name, a.cbsa_name), -cmp(b.Occ, a.Occ)]
+  //   );
+  // });
   var cbsa_names = cbsa.map(function (obj) {
     return obj.cbsa_name
   });
@@ -414,30 +479,35 @@ $(document).ready(function () {
   displayCBSA(cbsa);
 
   $("#tbl_inst").hide();
+
   $("#radio_chart_align").on('click', function () {
+    radio_align = 1;
+    radio_shortage = 0;
     if (update == 0) {
       chartData = GetChartData(cbsa, 1);
-      drawChart(chartData[1], chartData[0]);
+      drawChart(data = chartData[1], xcat = chartData[0]);
     }
     else if (update == 1) {
-      chartData = GetChartData(cbsa, 1);
-      drawChart(chartData[1], chartData[0]);
+      chartData = GetChartData(cbsa_subset, 1);
+      drawChart(data = chartData[1], xcat = chartData[0], ttype = 1, h = h);
     }
   });
   $("#radio_chart_shortage").on('click', function () {
+    radio_shortage = 1;
+    radio_align = 0;
     if (update == 0) {
       chartData = GetChartData(cbsa, 2);
-      drawChart(chartData[1], chartData[0], 'Shortage by occupation', 2);
+      drawChart(data = chartData[1], xcat = chartData[0], h = 2);
     }
     else if (update == 1) {
-      chartData = GetChartData(cbsa, 2);
-      drawChart(chartData[1], chartData[0], 'Shortage by occupation', 2);
+      chartData = GetChartData(cbsa_subset, 2);
+      drawChart(data = chartData[1], xcat = chartData[0], ttype = 2, h = h);
     }
   });
   $("#navInst").on('click', function () {
-
     tab_inst = 1;
     tab_cert = 0;
+    $("#chart-col").hide();
     $("#tbl_cbsa").hide();
     if (update == 0) {
       $("#tbl_inst").show();
@@ -454,13 +524,14 @@ $(document).ready(function () {
         $('#tbl_cbsa_noshortage').hide();
         $("#tbl_inst").hide();
         $("#tbl_inst_noshortage").show();
-        displayInst(inst_subset, showcolumns = noshortageinst, div = '#table-inst-noshortage');
+        displayInst(inst_subset, showcolumns = noshortageinst, div = '#table-inst-noshortage', ol = [4, 7, 10]);
       }
     }
   });
   $("#navCBSA").on('click', function () {
     tab_cert = 1;
     tab_inst = 0;
+    $("#chart-col").show();
     $("#tbl_inst").hide();
     if (update == 0) {
       $('#tbl_cbsa').show();
@@ -477,8 +548,29 @@ $(document).ready(function () {
         $("#tbl_inst_shortage").hide();
         $("#tbl_inst_noshortage").hide();
         $('#tbl_cbsa_noshortage').show();
-        displayCBSA(cbsa_subset, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage');
+        displayCBSA(cbsa_subset, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage', ol = [4, 7, 10]);
       }
+    }
+  });
+
+  var selection = 0;
+  $("#search-cbsa-input").on("keyup", function () {
+    var value = $(this).val().toLowerCase();
+    $("#list_cbsa li").filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    if (value.length > 0 & selection == 0) {
+      $("#list_cbsa input:checkbox").prop('checked', false);
+      $("#list_cbsa input:checkbox").change(function () {
+        selection = 1;
+        // $("#search-cbsa-input").val('')
+      })
+    }
+    else if (value.length == 0 & selection == 0) {
+      $("#list_cbsa input:checkbox").prop('checked', true);
+    } else if (selection == 1) {
+      // do nothing? Show list with selected item
+      // already implemented by on keyup above?
     }
   });
 
@@ -506,7 +598,7 @@ $(document).ready(function () {
       $("#chk_occ_0").prop('checked', false);
     }
   });
-
+  var h;
   $("#btn_update").on("click", function () {
     update = 1;
     // Check status of radio button
@@ -528,13 +620,16 @@ $(document).ready(function () {
     });
     cbsa_subset = cbsa.filter(item => cbsa_values.includes(item.cbsa_name)).filter(item => occ_values.includes(item.Occ));
     if (val_ratio == "0") {
+      $("#radio_chart_shortage").attr('disabled', false);
     }
     else if (val_ratio == "1") {
+      $("#radio_chart_shortage").attr('disabled', false);
       cbsa_subset = cbsa_subset.filter(function (item) {
         return item.ratio < 1;
       })
     }
     else if (val_ratio == "2") {
+      $("#radio_chart_shortage").attr('disabled', true);
       cbsa_subset = cbsa_subset.filter(function (item) {
         return item.ratio >= 1;
       })
@@ -570,7 +665,7 @@ $(document).ready(function () {
       $("#tbl_inst").hide();
       $("#tbl_inst_noshortage").hide();
       $('#tbl_cbsa_noshortage').show();
-      displayCBSA(cbsa_subset, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage');
+      displayCBSA(cbsa_subset, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage', ol = [4, 7, 10]);
     } else if (val_ratio != "2" && tab_inst == 1) {
       $('#tbl_cbsa').hide();
       $('#tbl_cbsa_noshortage').hide();
@@ -582,15 +677,30 @@ $(document).ready(function () {
       $('#tbl_cbsa_noshortage').hide();
       $("#tbl_inst").hide();
       $("#tbl_inst_noshortage").show();
-      displayInst(inst_subset, showcolumns = noshortageinst, div = '#table-inst-noshortage');
+      displayInst(inst_subset, showcolumns = noshortageinst, div = '#table-inst-noshortage', ol = [4, 7, 10]);
     }
     // Possibly update chart
-    // var chartsubData = GetChartData(cbsa_subset, 1);
-
-    // var forChart = chartsubData[1].filter(obj => {
-    //   var value = obj.data;
-    //   return Array.isArray(value) && value.length > 0;
-    // });
-    // updateChart = [chartsubData[0], forChart];
+    var chartsubData;
+    var t;
+    if (radio_align == 1) {
+      var t = 1;
+      chartsubData = GetChartData(cbsa_subset, 1)
+      var forChart = chartsubData[1].filter(obj => {
+        var value = obj.data;
+        return Array.isArray(value) && value.length > 0;
+      });
+    }
+    else if (radio_shortage == 1) {
+      var t = 2;
+      chartsubData = GetChartData(cbsa_subset, 2)
+      var forChart = chartsubData[1].filter(obj => {
+        var value = obj.data;
+        return Array.isArray(value) && value.length > 0;
+      });
+    }
+    var l = chartsubData[0].length;
+    h = Math.min(l * 100, 5000);
+    updateChart = [chartsubData[0], forChart];
+    drawChart(data = updateChart[1], xcat = updateChart[0], ttype = t, h = h);
   });
 });

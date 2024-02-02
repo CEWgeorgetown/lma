@@ -13,13 +13,45 @@ body {
 }
 
 #list_occ {
-    height: 100px;
-    overflow-y: auto;
+    height: 200px;
+    /* overflow-y: auto; */
 }
 
 #chart {
     max-width: 600px;
     min-width: 320px;
-    height: 800px;
+    height: 500px;
     margin: 0 auto;
 }
+
+table {
+    border-collapse: collapse;
+}
+
+.outlined-left {
+    border-left: 1px solid grey;
+}
+
+th[colspan]:not([colspan="1"]) {
+    text-align: center;
+}
+
+.dataTables_filter {
+    float: left !important;
+}
+
+.dataTables_length {
+    /* float: right !important; */
+    position: absolute;
+    top: 2%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+}
+
+.nav-link:hover {
+    background-color: aquamarine;
+}
+
+/* #tbl_inst {
+    overflow-x: auto;
+} */
