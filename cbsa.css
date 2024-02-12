@@ -47,6 +47,11 @@ th[colspan]:not([colspan="1"]) {
     left: 30%;
     transform: translate(-50%, -50%); */
 }
+/* Custom CSS for Bootstrap  5 tooltips */
+.tooltip-inner {
+    text-align: left; /* Align text to the left */
+    font-size:  11px; /* Set the desired font size */
+}
 
 .nav-link:hover {
     background-color:aqua;

@@ -245,7 +245,7 @@ function GetChartData(data, varval) {
     'Blue-collar': { name: 'Blue-collar', data: [] },
     'Health': { name: 'Health', data: [] },
     'Management': { name: 'Management', data: [] },
-    'Personal services': { name: 'Personal services', data: [] },
+    'Protective services': { name: 'Protective services', data: [] },
     'STEM': { name: 'STEM', data: [] }
   };
   $.each(data, function (i, value) {
@@ -333,7 +333,7 @@ function drawChart(data = cbsa, xcat, ttype = 1, h = 5000) {
     pf = '<td style="padding:0"><b>{point.y}</b></td></tr>';
     yf = '{value: , .0f}';
     ya = 'Annual credential shortage';
-    mo = null;
+    mo = null
   };
 
   $("#chart").highcharts({
@@ -589,6 +589,11 @@ $(document).ready(function () {
     }
   });
 
+  function toggleInfoBox() {
+    var infoBox = document.getElementsByClassName('highcharts-title')[0];
+    var displayStyle = window.getComputedStyle(infoBox).display;
+    infoBox.style.display = displayStyle === 'none' ? 'block' : 'none';
+}
   function getDataForUpdate() {
     $("#search-params").hide();
    // Check status of radio button
