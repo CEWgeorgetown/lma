@@ -102,9 +102,9 @@ function displayCBSA(d, showcolumns = allCBSA, div = '#table-cbsa') {
 };
 var allinst = [
   { "data": "cbsa_name" },
+  { "data": "Occ" },
   { "data": "name" },
   { "data": "sector" },
-  { "data": "Occ" },
   {
     "data": "acert",
     render: $.fn.dataTable.render.number(',', '.', 0)
@@ -131,12 +131,6 @@ var allinst = [
   },
   {
     "data": "pcbsa",
-    render: function (data, type, row) {
-      return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + '%';
-    }
-  },
-  {
-    "data": "pocc",
     render: function (data, type, row) {
       return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + '%';
     }
@@ -144,17 +138,13 @@ var allinst = [
   {
     "data": "inc1",
     render: $.fn.dataTable.render.number(',', '.', 0)
-  },
-  {
-    "data": "inc2",
-    render: $.fn.dataTable.render.number(',', '.', 0)
   }
 ]
 var noshortageinst = [
   { "data": "cbsa_name" },
+  { "data": "Occ" },
   { "data": "name" },
   { "data": "sector" },
-  { "data": "Occ" },
   {
     "data": "acert",
     render: $.fn.dataTable.render.number(',', '.', 0)
@@ -184,15 +174,9 @@ var noshortageinst = [
     render: function (data, type, row) {
       return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + '%';
     }
-  },
-  {
-    "data": "pocc",
-    render: function (data, type, row) {
-      return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + '%';
-    }
   }
 ]
-function displayInst(d, showcolumns = allinst, div = '#table-inst', ol = [4, 7, 10, 12]) {
+function displayInst(d, showcolumns = allinst, div = '#table-inst', ol = [4, 7]) {
   $(div).DataTable({
     initComplete: function () {
       this.api().columns([0, 1, 2, 3]).every(function () {
@@ -308,11 +292,39 @@ function drawChart(data = cbsa, xcat, ttype = 1, h = 5000) {
   }]
   if (ttype == 1) {
     ref = refLine;
-    ann = anno;
-    ttl = "Alignment ratio by occupation";
+    ann = null;
+    ttl = "Credentials-to-jobs ratio";
     pf = '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>';
     yf = '{value: , .1f}';
     ya = 'Alignment ratio';
+    mo = function() {
+      const chart = this
+      chart.title.on('mouseover', e => {
+        chart.titleTooltip = this.renderer.label(
+            'Values less than one indicate <br>a shortage in credential production,<br> values greater than one indicate<br> a surplus in credential production,<br> and values equal to one indicate perfect <br> alignment between credential production <br> and future occupational demand. To account<br> for the margin of error in the estimated<br> ratio values, we identify true credential<br> shortages as those where the credentials-to-jobs ratio is less than 0.93.',
+            200,
+            150,
+            'rectangle'
+          )
+          .css({
+            color: '#FFFFFF',
+            fontSize: "10px"  
+          })
+          .attr({
+            fill: 'rgba(0, 0, 0, 0.75)',
+            padding: 8,
+            r: 4,
+          })
+          .add()
+          .toFront()
+      })
+
+      chart.title.on('mouseout', e => {
+        if (chart.titleTooltip) {
+          chart.titleTooltip.destroy()
+        }
+      })
+    };
   }
   else if (ttype == 2) {
     ttl = "Shortage by occupation";
@@ -320,7 +332,8 @@ function drawChart(data = cbsa, xcat, ttype = 1, h = 5000) {
     ref = null;
     pf = '<td style="padding:0"><b>{point.y}</b></td></tr>';
     yf = '{value: , .0f}';
-    ya = 'Shortage';
+    ya = 'Annual credential shortage';
+    mo = null;
   };
 
   $("#chart").highcharts({
@@ -329,15 +342,18 @@ function drawChart(data = cbsa, xcat, ttype = 1, h = 5000) {
     },
     chart: {
       type: 'bar',
-      // marginTop: 150,
+      marginTop: 150,
       scrollablePlotArea: {
         minHeight: h,
         scrollPositionX: 1,
+      },
+      events: {
+        load: mo
       }
     },
     yAxis: {
       title: {
-        text: ya
+        text: ''
       },
       offset: 5,
       opposite: true,
@@ -433,19 +449,41 @@ $(document).ready(function () {
   //   .then(cbsa => console.log(cbsa))
   //   .catch(error => console.error('Error fetching JSON:', error));
 
-  var update = 0;
   var cbsa_subset;
   var inst_subset;
   var val_ratio;
-  var tab_cert = 1;
+  var tab_cert = 0;
   var tab_inst = 0;
   var updateChart = [];
   var radio_align = 1;
   var radio_shortage = 0;
+  // var chartData;
+  var h;
+  var z = cbsa.filter(obj => {
+    return obj.ratio >= 0.93 && obj.ratio < 1
+  });
+  // Zero out values outside 95% CI 
+  $.each(cbsa, function(index, obj) {
+    if (obj.ratio >= 0.93) {
+      obj.shortage = 0;
+    }
+  });
+  // Modify institutions measure 1 with ratio less than 0.93
+  $.each(z, function(index, obj1) {
+    $.each(inst, function(index, obj2) {
+      if (obj1.cbsa_name == obj2.cbsa_name && obj1.Occ == obj2.Occ) {
+        obj2.inc1 = 0;
+      }
+    });
+  });
   // Filter out institutions that do not produce awards for an occupation
   inst = inst.filter(obj => {
     return obj.pocc > 0
   });
+  // Filter only high paying awards
+  inst = inst.filter(obj => {
+    return obj.amhp > 0
+  })
   // dynamically sort and fill dropdown for CBSA
   cbsa.sort((a, b) => a.cbsa_name > b.cbsa_name);
   // cbsa.sort(function (a, b) {
@@ -474,83 +512,35 @@ $(document).ready(function () {
   $("#list_occ input:checkbox").prop('checked', true);
   $("#radio_default").prop("checked", true);
   $("#radio_chart_align").prop("checked", true);
-  var chartData = GetChartData(cbsa, 1);
-  drawChart(chartData[1], chartData[0]);
-  displayCBSA(cbsa);
-
+  // chartData = GetChartData(cbsa, 1);
+  // drawChart(chartData[1], chartData[0]);
+  // displayCBSA(cbsa);
+  $("#chart-col").hide();
+  $("#tbl_cbsa").hide();
   $("#tbl_inst").hide();
+  $("#about").hide();
+  $("#navSearch").css("background-color", "aquamarine");
 
   $("#radio_chart_align").on('click', function () {
     radio_align = 1;
     radio_shortage = 0;
-    if (update == 0) {
-      chartData = GetChartData(cbsa, 1);
-      drawChart(data = chartData[1], xcat = chartData[0]);
-    }
-    else if (update == 1) {
       chartData = GetChartData(cbsa_subset, 1);
       drawChart(data = chartData[1], xcat = chartData[0], ttype = 1, h = h);
-    }
   });
   $("#radio_chart_shortage").on('click', function () {
     radio_shortage = 1;
     radio_align = 0;
-    if (update == 0) {
-      chartData = GetChartData(cbsa, 2);
-      drawChart(data = chartData[1], xcat = chartData[0], h = 2);
-    }
-    else if (update == 1) {
       chartData = GetChartData(cbsa_subset, 2);
       drawChart(data = chartData[1], xcat = chartData[0], ttype = 2, h = h);
-    }
   });
-  $("#navInst").on('click', function () {
-    tab_inst = 1;
-    tab_cert = 0;
-    $("#chart-col").hide();
-    $("#tbl_cbsa").hide();
-    if (update == 0) {
-      $("#tbl_inst").show();
-      displayInst(inst);
-    } else {
-      if (val_ratio != "2") {
-        $('#tbl_cbsa').hide();
-        $('#tbl_cbsa_noshortage').hide();
-        $("#tbl_inst_noshortage").hide();
-        $("#tbl_inst").show();
-        displayInst(inst_subset);
-      } else if (val_ratio == "2") {
-        $('#tbl_cbsa').hide();
-        $('#tbl_cbsa_noshortage').hide();
-        $("#tbl_inst").hide();
-        $("#tbl_inst_noshortage").show();
-        displayInst(inst_subset, showcolumns = noshortageinst, div = '#table-inst-noshortage', ol = [4, 7, 10]);
-      }
-    }
-  });
-  $("#navCBSA").on('click', function () {
-    tab_cert = 1;
-    tab_inst = 0;
-    $("#chart-col").show();
-    $("#tbl_inst").hide();
-    if (update == 0) {
-      $('#tbl_cbsa').show();
-      displayCBSA(cbsa);
-    } else {
-      if (val_ratio != "2") {
-        $('#tbl_cbsa_noshortage').hide();
-        $("#tbl_inst_shortage").hide();
-        $("#tbl_inst_noshortage").hide();
-        $('#tbl_cbsa').show();
-        displayCBSA(cbsa_subset);
-      } else if (val_ratio == "2") {
-        $('#tbl_cbsa').hide();
-        $("#tbl_inst_shortage").hide();
-        $("#tbl_inst_noshortage").hide();
-        $('#tbl_cbsa_noshortage').show();
-        displayCBSA(cbsa_subset, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage', ol = [4, 7, 10]);
-      }
-    }
+  $("#navSearch").on('click', function () {
+    $("#navSearch").attr('style', 'background-color: aquamarine');
+    $("#navCBSA").css("background-color", "");
+    $("#navInst").css("background-color", "");
+    $("#navAbt").css("background-color", "");
+    $("#search-params").show();
+    $("#all-vis").hide();
+    $("#about").hide();
   });
 
   var selection = 0;
@@ -598,10 +588,10 @@ $(document).ready(function () {
       $("#chk_occ_0").prop('checked', false);
     }
   });
-  var h;
-  $("#btn_update").on("click", function () {
-    update = 1;
-    // Check status of radio button
+
+  function getDataForUpdate() {
+    $("#search-params").hide();
+   // Check status of radio button
     $("input[name=flexRadiocbsa]:checked").each(function () {
       // console.log($(this).val());
       val_ratio = $(this).val();
@@ -619,6 +609,7 @@ $(document).ready(function () {
       cbsa_values.push($(this).next('label').text());
     });
     cbsa_subset = cbsa.filter(item => cbsa_values.includes(item.cbsa_name)).filter(item => occ_values.includes(item.Occ));
+    
     if (val_ratio == "0") {
       $("#radio_chart_shortage").attr('disabled', false);
     }
@@ -653,7 +644,30 @@ $(document).ready(function () {
       });
     }
 
-    displayCBSA(cbsa_subset);
+    var chartsubData;
+    var t;
+    if (radio_align == 1) {
+      var t = 1;
+      chartsubData = GetChartData(cbsa_subset, 1)
+      var forChart = chartsubData[1].filter(obj => {
+        var value = obj.data;
+        return Array.isArray(value) && value.length > 0;
+      });
+    }
+    else if (radio_shortage == 1) {
+      var t = 2;
+      chartsubData = GetChartData(cbsa_subset, 2)
+      var forChart = chartsubData[1].filter(obj => {
+        var value = obj.data;
+        return Array.isArray(value) && value.length > 0;
+      });
+    }
+    var l = chartsubData[0].length;
+    h = Math.min(l * 100, 5000);
+    updateChart = [chartsubData[0], forChart];
+    drawChart(data = updateChart[1], xcat = updateChart[0], ttype = t, h = h);
+  };
+  function displayUpdatedData() {
     if (val_ratio != "2" && tab_cert == 1) {
       $('#tbl_cbsa_noshortage').hide();
       $("#tbl_inst").hide();
@@ -679,28 +693,91 @@ $(document).ready(function () {
       $("#tbl_inst_noshortage").show();
       displayInst(inst_subset, showcolumns = noshortageinst, div = '#table-inst-noshortage', ol = [4, 7, 10]);
     }
-    // Possibly update chart
-    var chartsubData;
-    var t;
-    if (radio_align == 1) {
-      var t = 1;
-      chartsubData = GetChartData(cbsa_subset, 1)
-      var forChart = chartsubData[1].filter(obj => {
-        var value = obj.data;
-        return Array.isArray(value) && value.length > 0;
-      });
-    }
-    else if (radio_shortage == 1) {
-      var t = 2;
-      chartsubData = GetChartData(cbsa_subset, 2)
-      var forChart = chartsubData[1].filter(obj => {
-        var value = obj.data;
-        return Array.isArray(value) && value.length > 0;
-      });
-    }
-    var l = chartsubData[0].length;
-    h = Math.min(l * 100, 5000);
-    updateChart = [chartsubData[0], forChart];
-    drawChart(data = updateChart[1], xcat = updateChart[0], ttype = t, h = h);
+  };
+
+  $("#btn_update").on("click", function () {
+    $("#navCBSA").attr('style', 'background-color: aquamarine');
+    $("#navSearch").css('background-color', "");
+    $("#navInst").css("background-color", "");
+    getDataForUpdate();
+    tab_cert = 1;
+    $("#all-vis").show();
+    $("#chart-col").show();
+    displayUpdatedData();
   });
+
+  $("#navAbt").on('click', function () {
+    $("#search-params").hide();
+    $("#about").show();
+    $("#navAbt").css('background-color', "aquamarine");
+    $("#navCBSA").css("background-color", "");
+    $("#navSearch").css('background-color', "");
+    $("#navInst").css("background-color", "");
+  });
+  $("#navInst").on('click', function () {
+    tab_inst=1;
+    tab_cert = 0;
+    $("#about").hide();
+    $("#navInst").attr('style', 'background-color: aquamarine');
+    $("#navSearch").css('background-color', "");
+    $("#navCBSA").css("background-color", "");
+    $("#navAbt").css("background-color", "");
+    $("#all-vis").show();
+    $("#chart-col").hide();
+    $("#tbl_cbsa").hide();
+    getDataForUpdate();
+    displayUpdatedData();
+    //   if (val_ratio != "2") {
+    //     $('#tbl_cbsa').hide();
+    //     $('#tbl_cbsa_noshortage').hide();
+    //     $("#tbl_inst_noshortage").hide();
+    //     $("#tbl_inst").show();
+    //     displayInst(inst_subset);
+    //   } else if (val_ratio == "2") {
+    //     $('#tbl_cbsa').hide();
+    //     $('#tbl_cbsa_noshortage').hide();
+    //     $("#tbl_inst").hide();
+    //     $("#tbl_inst_noshortage").show();
+    //     displayInst(inst_subset, showcolumns = noshortageinst, div = '#table-inst-noshortage', ol = [4, 7, 10]);
+    // }
+  });
+  $("#navCBSA").on('click', function () {
+    tab_cert=1;
+    tab_inst = 0;
+    $("#about").hide();
+    $("#navCBSA").attr('style', 'background-color: aquamarine');
+    $("#navSearch").css('background-color', "");
+    $("#navInst").css("background-color", "");
+    $("#navAbt").css("background-color", "");
+    $("#all-vis").show();
+    getDataForUpdate();
+    displayUpdatedData();
+    $("#chart-col").show();
+  // drawChart(chartData[1], chartData[0]);
+  // $("#tbl_inst").hide();
+  //     if (val_ratio != "2") {
+  //       $('#tbl_cbsa_noshortage').hide();
+  //       $("#tbl_inst_shortage").hide();
+  //       $("#tbl_inst_noshortage").hide();
+  //       $('#tbl_cbsa').show();
+  //       displayCBSA(cbsa_subset);
+  //     } else if (val_ratio == "2") {
+  //       $('#tbl_cbsa').hide();
+  //       $("#tbl_inst_shortage").hide();
+  //       $("#tbl_inst_noshortage").hide();
+  //       $('#tbl_cbsa_noshortage').show();
+  //       displayCBSA(cbsa_subset, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage', ol = [4, 7, 10]);
+  //     }
+  });
+  $('[data-bs-toggle="tooltip"]').each(function() {
+    var tooltip = new bootstrap.Tooltip(this);
+
+    // Attach click event to hide tooltip after a delay
+    $(this).on('click', function() {
+      setTimeout(function() {
+        tooltip.hide();
+      },  2000); // Delay in milliseconds
+    });
+  });
+
 });

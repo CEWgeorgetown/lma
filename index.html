@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Labor market alignment</title>
+    <title>Credentials-to-jobs alignment for high-paying middle-skills occupations</title>
 
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=PT+Serif+Caption" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
@@ -35,6 +35,7 @@
     <!-- <script src="//code.highcharts.com/modules/exporting.js"></script>
   <script src="//code.highcharts.com/modules/export-data.js"></script> -->
     <script src="//code.highcharts.com/modules/accesibility.js"></script>
+    <!-- <script src="//www.highcharts.com/docs/accessibility/accessibility-module"></script> -->
     <script src="//code.highcharts.com/modules/annotations.js"></script>
     <script src="//code.highcharts.com/modules/no-data-to-display.js"></script>
     <!-- <script type="text/javascript" src="cbsa.js"></script>
@@ -47,50 +48,63 @@
 <body>
     <div class="container-fluid ms-1">
         <div>
-            <h1>Labor market alignment</h1>
+            <h2>Credentials-to-jobs alignment for high-paying middle-skills occupations</h2>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="navCBSA">CBSA</a>
+                    <a class="nav-link" href="#" id="navSearch">Search</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="navInst">Institutions</a>
+                    <a class="nav-link" href="#" id="navCBSA" data-bs-toggle="tooltip"
+                    data-bs-html="true"
+                    data-bs-title="Displays searchable analysis at the level of the metropolitan area, as defined by the core-based statistical area (CBSA) code">Metro areas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="navDoc">Documentation</a>
+                    <a class="nav-link" href="#" id="navInst" data-bs-toggle="tooltip"
+                    data-bs-html="true"
+                    data-bs-title="Displays searchable analysis at the level of the middle-skills education or training provider">Providers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="navAbt" data-bs-toggle="tooltip"
+                    data-bs-html="true"
+                    data-bs-title="Provides background information on how credentials relate to high-paying middle-skills occupations">About</a>
                 </li>
             </ul>
         </div>
-        <div class="row">
-            <div class="col-4">
+        <div class="row" id="search-params">
+            <div class="col-3 pt-3">
+                
+                <b>Select metro area(s)</b>
+                <input type="text" id="search-cbsa-input" placeholder="Search metro area" class="form-control">
+                <ul class="list-group pt-1" id="list_cbsa"></ul>
+            </div>
+            <div class="col-3 pt-3">
+                <b>Select alignment criteria</b>
                 <div class="pt-3 pb-2">
-                    <div class="form-check form-check-inline">
+                    <div class="form-check ">
                         <input class="form-check-input" type="radio" name="flexRadiocbsa" id="radio_default" value="0">
                         <label class="form-check-label" for="radio_default">
-                            All listings
+                            All metro areas
                         </label>
                     </div>
-                    <div class="form-check form-check-inline">
+                    <div class="form-check">
                         <input class="form-check-input" type="radio" name="flexRadiocbsa" id="radio_shortage" value="1">
                         <label class="form-check-label" for="radio_shortage">
-                            Only listings with shortages
+                            Metro areas with credential shortages
                         </label>
                     </div>
-                    <div class="form-check form-check-inline">
+                    <div class="form-check">
                         <input class="form-check-input" type="radio" name="flexRadiocbsa" id="radio_no_shortage"
                             value="2">
                         <label class="form-check-label" for="radio_no_shortage">
-                            Only listings without shortages
+                            Metro areas without credential shortages
                         </label>
                     </div>
                 </div>
-                <b>Select metro area(s)</b>
-                <input type="text" id="search-cbsa-input" placeholder="Search CBSA..." class="form-control">
-                <ul class="list-group pt-1" id="list_cbsa"></ul>
             </div>
             <div class="col-4">
                 <div id="list_occ">
                     <div class="row pt-3">
-                        <b>Select occupation(s)</b>
+                        <b>Select occupational group(s)</b>
                         <div class="col pt-4">
                             <ul class="list-group">
                                 <li class="list-group-item">
@@ -115,7 +129,7 @@
                                 </li>
                                 <li class="list-group-item">
                                     <input class="form-check-input me-1" type="checkbox" value="3" id="chk_occ_3">
-                                    <label class="form-check-label" for="">Personal services</label>
+                                    <label class="form-check-label" for="">Protective services</label>
                                 </li>
                                 <li class="list-group-item">
                                     <input class="form-check-input me-1" type="checkbox" value="2" id="chk_occ_2">
@@ -133,129 +147,266 @@
             </div>
         </div>
         <hr>
-        <div class="row">
-            <div class="col-4" id="chart-col">
-                <div class="row ms-1">
-                    <div class="col-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadiochart" id="radio_chart_align"
-                                value="1">
-                            <label class="form-check-label" for="radio-align" data-bs-toggle="tooltip"
-                                data-bs-html="true"
-                                data-bs-title="An alignment ratio of 1 or greater means there is no shortage; a ratio less than 1 means there is a shortage.">
-                                Alignment
-                            </label>
+        
+            <div class="row" id="all-vis">
+                <div class="col-4" id="chart-col">
+                    <div class="row ms-1">
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadiochart" id="radio_chart_align"
+                                    value="1">
+                                <label class="form-check-label" for="radio-align">
+                                    Credentials-to-jobs ratio
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadiochart" id="radio_chart_shortage"
+                                    value="2">
+                                <label class="form-check-label" for="radio-shortage">
+                                    Annual credential shortage
+                                </label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-9">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="flexRadiochart" id="radio_chart_shortage"
-                                value="2">
-                            <label class="form-check-label" for="radio-shortage">
-                                Shortage
-                            </label>
-                        </div>
-                    </div>
+                    <div id="chart"></div>
                 </div>
-                <div id="chart"></div>
-            </div>
-            <div class="col-sm-8 col-xs-4">
-                <div class="row">
-                    <div id="tbl_cbsa" class="pt-2">
-                        <table id="table-cbsa" class="display" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th><span></span>CBSA Name</th>
-                                    <th><span></span>Occupation cluster</th>
-                                    <th><span></span>Alignment ratio</th>
-                                    <th><span></span>Shortage</th>
-                                    <th><span></span>Number of awards</th>
-                                    <th><span></span>Number of openings</th>
-                                    <th><span></span>Number of high paying openings</th>
-                                    <th><span></span>Number of low paying openings</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <div id="tbl_cbsa_noshortage" class="pt-2">
-                        <table id="table-cbsa-noshortage" class="display" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th><span></span>CBSA Name</th>
-                                    <th><span></span>Occupation cluster</th>
-                                    <th><span></span>Alignment ratio</th>
-                                    <th><span></span>Number of awards</th>
-                                    <th><span></span>Number of openings</th>
-                                    <th><span></span>Number of high paying openings</th>
-                                    <th><span></span>Number of low paying openings</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div> <!-- row/cbsa table -->
-                <div class="row">
-                    <div id="tbl_inst" class="pt-2">
-                        <table id="table-inst" class="display" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th colspan="4"></th>
-                                    <th colspan="3">Total credentials awarded</th>
-                                    <th colspan="3">Total high paying credentials awarded</th>
-                                    <th colspan="2">Awards as a share of</th>
-                                    <th colspan="2">Increase in high paying awards needed</th>
-                                </tr>
-                                <tr>
-                                    <th><span></span>CBSA Name</th>
-                                    <th><span></span>Institution name</th>
-                                    <th><span></span>Institution sector</th>
-                                    <th><span></span>Occupation cluster</th>
-                                    <th><span></span>Certificates</th>
-                                    <th><span></span>Associate's degrees</th>
-                                    <th><span></span>All middle skills credentials</th>
-                                    <th><span></span>Certificates</th>
-                                    <th><span></span>Associate's degrees</th>
-                                    <th><span></span>All middle skills credentials</th>
-                                    <th><span></span>CBSA high paying awards</th>
-                                    <th><span></span>Occupation</th>
-                                    <th><span></span>Measure 1</th>
-                                    <th><span></span>Measure 2</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <div id="tbl_inst_noshortage" class="pt-2">
-                        <table id="table-inst-noshortage" class="display" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th colspan="4"></th>
-                                    <th colspan="3">Total credentials awarded</th>
-                                    <th colspan="3">Total high paying credentials awarded</th>
-                                    <th colspan="2">Awards as a share of</th>
-                                </tr>
-                                <tr>
-                                    <th><span></span>CBSA Name</th>
-                                    <th><span></span>Institution name</th>
-                                    <th><span></span>Institution sector</th>
-                                    <th><span></span>Occupation cluster</th>
-                                    <th><span></span>Certificates</th>
-                                    <th><span></span>Associate's degrees</th>
-                                    <th><span></span>All middle skills credentials</th>
-                                    <th><span></span>Certificates</th>
-                                    <th><span></span>Associate's degrees</th>
-                                    <th><span></span>All middle skills credentials</th>
-                                    <th><span></span>CBSA high paying awards</th>
-                                    <th><span></span>Occupation</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div> <!-- row/inst table -->
-            </div> <!-- 9-col -->
-        </div> <!-- row -->
+                <div class="col-sm-8 col-xs-4">
+                    <div class="row">
+                        <div id="tbl_cbsa" class="pt-2">
+                            <table id="table-cbsa" class="display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5"></th>
+                                        <th colspan="3">Annual job openings</th>
+                                    </tr>
+                                    <tr>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Name of the metropolitan area, defined by core-based statistical area (CBSA) code"><span></span>Metro area</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Occupational group that includes high-paying middle-skills occupations"><span></span>Occupational group</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="The metro area’s ratio of the annual number of credentials produced that align with high-paying middle-skills occupations within the occupational group to the projected annual number of job openings available in all occupations for workers with those credentials <br>
+                                        <em>Values less than one indicate a shortage in credential production, values greater than one indicate a surplus in credential production, and values equal to one indicate perfect alignment between credential production and future occupational demand. To account for the margin of error in the estimated ratio values, we identify true credential shortages as those where the credentials-to-jobs ratio is less than 0.93.</em>"><span></span>Credentials-to-jobs ratio</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="The metro area’s difference between the annual number of credentials produced that align with high-paying middle-skills occupations within the occupational group and the projected annual number of job openings available in all occupations for middle-skills workers with those credentials <br>
+                                        Values are only reported when the credentials-to-jobs ratio within the occupational group is less than 0.93"><span ></span>Annual credential shortage</th>
+                                        <th data-bs-toggle="tooltip"
+                                            data-bs-html="true"
+                                            data-bs-title="The total annual number of middle-skills credentials (certificates and associate’s degrees) awarded in the metro area that align with high-paying occupations in the occupational group"><span></span>Annual credentials awarded</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="The projected annual number of overall job openings (both high-paying and lower-paying) available to middle-skills workers with credentials that align with high-paying occupations in the occupational group"><span></span>Total</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Within the occupational group, the projected annual number of job openings in high-paying occupations available to middle-skills workers"><span></span>In high-paying occupations</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="The projected annual number of job openings in lower-paying occupations available to middle-skills workers with credentials that also align with high-paying occupations in the occupational group (lower-paying occupations may include jobs in other occupational groups)"><span></span>In lower-paying occupations </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div id="tbl_cbsa_noshortage" class="pt-2">
+                            <table id="table-cbsa-noshortage" class="display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4"></th>
+                                        <th colspan="3">Annual job openings</th>
+                                    </tr>
+                                    <tr>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Name of the metropolitan area, defined by core-based statistical area (CBSA) code"><span></span>Metro area</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Occupational group that includes high-paying middle-skills occupations"><span></span>Occupational group</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="The metro area’s ratio of the annual number of credentials produced that align with high-paying middle-skills occupations within the occupational group to the projected annual number of job openings available in all occupations for workers with those credentials <br>
+                                        Values less than one indicate a shortage in credential production, values greater than one indicate a surplus in credential production, and values equal to one indicate perfect alignment between credential production and future occupational demand. To account for the margin of error in the estimated ratio values, we identify true credential shortages as those where the credentials-to-jobs ratio is less than 0.93"><span></span>Credentials-to-jobs ratio</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="The total annual number of middle-skills credentials (certificates and associate’s degrees) awarded in the metro area that align with high-paying occupations in the occupational group"><span></span>Annual credentials awarded</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="The projected annual number of overall job openings (both high-paying and lower-paying) available to middle-skills workers with credentials that align with high-paying occupations in the occupational group"><span></span>Total</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Within the occupational group, the projected annual number of job openings in high-paying occupations available to middle-skills workers"><span></span>In high-paying occupations</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="The projected annual number of job openings in lower-paying occupations available to middle-skills workers with credentials that also align with high-paying occupations in the occupational group (lower-paying occupations may include jobs in other occupational groups)"><span></span>In lower-paying occupations </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div> <!-- row/cbsa table -->
+                    <div class="row">
+                        <div id="tbl_inst" class="pt-2">
+                            <table id="table-inst" class="display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4"></th>
+                                        <th colspan="3">Annual credentials awarded </th>
+                                        <th colspan="3">Annual credentials aligned with high-paying occupations</th>
+                                        <th colspan="2"></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Name of the metropolitan area, defined by core-based statistical area (CBSA) code"><span></span>Metro area</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Occupational group that includes high-paying middle-skills occupations"><span></span>Occupational group</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Name of the middle-skills education or training provider"><span></span>Provider</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Sector of the provider"><span></span>Provider sector</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Total annual number of certificates produced by the provider"><span></span>Certificates</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Total annual number of associate’s degrees produced by the provider"><span></span>Associate's degrees</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Total annual number of certificates and associate’s degrees produced by the provider"><span></span>All middle-skills credentials</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Annual number of certificates produced by the provider that align to high-paying occupations in the occupational group"><span></span>Certificates</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Annual number of associate’s degrees produced by the provider that align to high-paying occupations in the occupational group"><span></span>Associate's degrees</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Annual number of middle-skills credentials (certificates and associate’s degrees) produced by the provider that align to high-paying occupations in the occupational group"><span></span>All</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Provider’s current production share of the metro area’s middle-skills credentials that align with high-paying occupations in the occupational group"><span></span>Provider’s production share of credentials aligned with high-paying occupations</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Based on its current production share of credentials aligned with high-paying occupations in the occupational group, provider would need to increase production of these credentials by x to address the metro area’s credential shortage <br>
+                                        Values are only reported when the metro area’s credentials-to-jobs ratio within the occupational group is less than 0.93"><span></span>Provider’s potential contribution to addressing credential shortage</th>
+                                        <!-- <th><span></span>Measure 2</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div id="tbl_inst_noshortage" class="pt-2">
+                            <table id="table-inst-noshortage" class="display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4"></th>
+                                        <th colspan="3">Annual credentials awarded </th>
+                                        <th colspan="3">Annual credentials aligned with high-paying occupations</th>
+                                        <th colspan="2"></th>
+                                    </tr>
+                                    <tr>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Name of the metropolitan area, defined by core-based statistical area (CBSA) code"><span></span>Metro area</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Occupational group that includes high-paying middle-skills occupations"><span></span>Occupational group</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Name of the middle-skills education or training provider"><span></span>Provider</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Sector of the provider"><span></span>Provider sector</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Total annual number of certificates produced by the provider"><span></span>Certificates</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Total annual number of associate’s degrees produced by the provider"><span></span>Associate's degrees</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Total annual number of certificates and associate’s degrees produced by the provider"><span></span>All middle-skills credentials</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Annual number of certificates produced by the provider that align to high-paying occupations in the occupational group"><span></span>Certificates</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Annual number of associate’s degrees produced by the provider that align to high-paying occupations in the occupational group"><span></span>Associate's degrees</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Total annual number of certificates and associate’s degrees produced by the provider" data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Annual number of middle-skills credentials (certificates and associate’s degrees) produced by the provider that align to high-paying occupations in the occupational group"><span></span>All</th>
+                                        <th data-bs-toggle="tooltip"
+                                        data-bs-html="true"
+                                        data-bs-title="Provider’s current production share of the metro area’s middle-skills credentials that align with high-paying occupations in the occupational group"><span></span>Provider’s production share of credentials aligned with high-paying occupations</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div> <!-- row/inst table -->
+                </div> <!-- 9-col -->
+            </div> <!-- row -->
+        <div id="about">
+            <h3>Overview</h3>
+            <p>In some occupations, the typical early-career worker with a middle-skills credential (certificate or associate’s degree) earns more than the national median for workers with bachelor’s degrees. The demand for workers in these occupations differs across local labor markets, as does local education and training providers’ success in preparing middle-skills workers for available jobs.</p>
+            <p>This tool examines how well local middle-skills providers are keeping up with future workforce demand in 55 US metro areas by comparing
+                <ol>
+                    <li>
+                        the current production of middle-skills credentials that lead to high-paying occupations for middle-skills workers in each metro area to 
+                    </li>
+                    <li>
+                        the projected local labor-market demand for workers in these occupations. 
+                    </li>
+                </ol>
+                </p>
+                <p>The tool allows users to identify where metro areas will need to increase their middle-skills credential production to meet projected local workforce demand. It also provides information about how many more credentials each provider would need to produce to address local shortages.</p>
+                <p>An accompanying document, <em>Missed Opportunity</em>, describes findings from the Georgetown University Center on Education and the Workforce’s analysis of the underlying data.</p>
+                <h3>High-paying middle-skills jobs</h3>
+                <p>High-paying jobs for early-career middle-skills workers are those that boast annual earnings above $53,000 (in 2022 dollars), exceeding the median annual earnings of young workers with a bachelor’s degree.</p>
+                <p>Using data from the US Census Bureau’s American Community Survey, we identified 107 high-paying middle-skills occupations—that is, occupations in which more than half of early-career middle-skills workers have a high-paying job. These high-paying occupations are found in five occupational groups: management, STEM, healthcare, protective services, and blue-collar jobs. </p>
+                <p>View a complete list of high-paying middle-skills occupations<a href="List of high-paying occupations and aligned programs.pdf">here</a>. </p>
+                <h3>Measuring credentials-to-jobs alignment</h3>
+                <p>The alignment metrics displayed in the tool are based on the program of study-to-occupation (CIP-SOC) crosswalk developed by the US Bureau of Labor Statistics and US Department of Education. Using the crosswalk to measure alignment is complicated by the fact that each program can align to multiple occupations and each occupation can align to multiple programs. Thus, in many instances, multiple programs lead to a specific occupation, and each of these programs also offers pathways to a variety of high-paying and lower-paying occupations.</p>
+                <p>Consider the following example:</p>
+                <ol>
+                    <li>
+                        The set of high-paying middle-skills STEM occupations includes <b>hydrologic technicians</b>.
+                    </li>
+                    <li>
+                        <b>Four programs of study provide a pathway to this occupation</b> &#8212 hydrology and water resource science; science technologies and technicians, general; science technologies and technicians, other; and physical science technologies and technicians, other. 
+                    </li>
+                    <li>
+                        <b>These programs also provide pathways to six other occupations.</b> Two of those occupations are also high-paying middle-skills STEM occupations (other geologic technicians and environmental science and protection technicians), two are lower-paying middle-skills STEM occupations (hydrologists and other science technicians), one is a high-paying middle-skills management occupation (natural science managers), and one is a lower-paying middle-skills education occupation (postsecondary science teachers).
+                    </li>
+                </ol>
+                <figure>
+                    <b>
+                        <figcaption>Example: Four programs offer a pathway to high-paying middle-skills work as a hydrologic technician, along with pathways to six other middle-skills occupations.</figcaption>
+                    </b>
+                    <img src="fig.png" alt="Example">
+                </figure>
+                <p>
+                    To determine if a local labor market faces a credential shortage in programs leading to high-paying middle-skills occupations, one needs to account for the projected number of job openings available in all occupations for workers with those credentials. In the example above, this means comparing the total annual number of middle-skills credentials awarded across the four programs to the projected annual number of job openings available to middle-skills workers across all seven occupations. 
+                </p>
+                <p>
+                    View a complete list of high-paying middle-skills occupations and aligned programs (sorted by occupation) <a href="List of high-paying occupations and aligned programs.pdf">here</a>.
+                </p>
+                <p>
+                    View a complete list of aligned programs and all high-paying and lower-paying occupations available to workers with those credentials (sorted by program of study)  <a href="List of aligned programs and all high-paying and lower-paying occupations.pdf">here</a>.
+                </p>
+  
+                
+        </div>
     </div> <!-- container -->
 
 </body>
