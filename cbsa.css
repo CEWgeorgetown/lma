@@ -50,7 +50,7 @@ th[colspan]:not([colspan="1"]) {
 /* Custom CSS for Bootstrap  5 tooltips */
 .tooltip-inner {
     text-align: left; /* Align text to the left */
-    font-size:  11px; /* Set the desired font size */
+    font-size:  12px; /* Set the desired font size */
 }
 
 .nav-link:hover {

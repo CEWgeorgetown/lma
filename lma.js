@@ -589,11 +589,11 @@ $(document).ready(function () {
     }
   });
 
-  function toggleInfoBox() {
-    var infoBox = document.getElementsByClassName('highcharts-title')[0];
-    var displayStyle = window.getComputedStyle(infoBox).display;
-    infoBox.style.display = displayStyle === 'none' ? 'block' : 'none';
-}
+//   function toggleInfoBox() {
+//     var infoBox = document.getElementsByClassName('highcharts-title')[0];
+//     var displayStyle = window.getComputedStyle(infoBox).display;
+//     infoBox.style.display = displayStyle === 'none' ? 'block' : 'none';
+// }
   function getDataForUpdate() {
     $("#search-params").hide();
    // Check status of radio button
@@ -718,6 +718,7 @@ $(document).ready(function () {
     $("#navCBSA").css("background-color", "");
     $("#navSearch").css('background-color', "");
     $("#navInst").css("background-color", "");
+    $("#all-vis").hide();
   });
   $("#navInst").on('click', function () {
     tab_inst=1;
