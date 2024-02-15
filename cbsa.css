@@ -8,7 +8,7 @@ body {
 }
 
 #list_cbsa {
-    height: 100px;
+    height: 400px;
     overflow-y: auto;
 }
 
@@ -20,7 +20,7 @@ body {
 #chart {
     max-width: 600px;
     min-width: 320px;
-    height: 500px;
+    height: 700px;
     margin: 0 auto;
 }
 

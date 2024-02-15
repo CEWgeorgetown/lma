@@ -60,7 +60,7 @@ var noshortageCBSA = [
     render: $.fn.dataTable.render.number(',', '.', 0)
   }
 ]
-function displayCBSA(d, showcolumns = allCBSA, div = '#table-cbsa') {
+function displayCBSA(d, showcolumns = allCBSA, div = '#table-cbsa', ol=5) {
 
   $(div).DataTable({
     initComplete: function () {
@@ -90,7 +90,11 @@ function displayCBSA(d, showcolumns = allCBSA, div = '#table-cbsa') {
     },
     // dom: 'Bfrtip',
     // buttons: ['excelHtml5', 'csv', 'pdf'],
-    fixedColumns: {
+    columnDefs: [{
+      targets: ol,
+      className: "outlined-left"
+    }],
+        fixedColumns: {
       left: 2
     },
     pageLength: 10,
@@ -176,7 +180,7 @@ var noshortageinst = [
     }
   }
 ]
-function displayInst(d, showcolumns = allinst, div = '#table-inst', ol = [4, 7]) {
+function displayInst(d, showcolumns = allinst, div = '#table-inst', ol = [4, 7, 10]) {
   $(div).DataTable({
     initComplete: function () {
       this.api().columns([0, 1, 2, 3]).every(function () {
@@ -301,7 +305,7 @@ function drawChart(data = cbsa, xcat, ttype = 1, h = 5000) {
       const chart = this
       chart.title.on('mouseover', e => {
         chart.titleTooltip = this.renderer.label(
-            'Values less than one indicate <br>a shortage in credential production,<br> values greater than one indicate<br> a surplus in credential production,<br> and values equal to one indicate perfect <br> alignment between credential production <br> and future occupational demand. To account<br> for the margin of error in the estimated<br> ratio values, we identify true credential<br> shortages as those where the credentials-to-jobs ratio is less than 0.93.',
+            'Values less than one indicate a shortage in<br> credential production, values greater than <br> one indicate a surplus in credential production,<br> and values equal to one indicate perfect alignment <br> between credential production and occupational<br> demand. See table notes for more details.',
             200,
             150,
             'rectangle'
@@ -327,7 +331,7 @@ function drawChart(data = cbsa, xcat, ttype = 1, h = 5000) {
     };
   }
   else if (ttype == 2) {
-    ttl = "Shortage by occupation";
+    ttl = "Annual credential shortage";
     ann = null;
     ref = null;
     pf = '<td style="padding:0"><b>{point.y}</b></td></tr>';
@@ -518,9 +522,19 @@ $(document).ready(function () {
   $("#chart-col").hide();
   $("#tbl_cbsa").hide();
   $("#tbl_inst").hide();
-  $("#about").hide();
-  $("#navSearch").css("background-color", "aquamarine");
+  $("#search-params").hide();
+  $("#about").show();
+  $("#navAbt").css("background-color", "aquamarine");
 
+  $("#begin").on('click' , function() {
+    $("#navSearch").attr('style', 'background-color: aquamarine');
+    $("#navCBSA").css("background-color", "");
+    $("#navInst").css("background-color", "");
+    $("#navAbt").css("background-color", "");
+    $("#search-params").show();
+    $("#all-vis").hide();
+    $("#about").hide();
+  });
   $("#radio_chart_align").on('click', function () {
     radio_align = 1;
     radio_shortage = 0;
@@ -621,13 +635,13 @@ $(document).ready(function () {
     else if (val_ratio == "1") {
       $("#radio_chart_shortage").attr('disabled', false);
       cbsa_subset = cbsa_subset.filter(function (item) {
-        return item.ratio < 1;
+        return item.ratio < 0.93;
       })
     }
     else if (val_ratio == "2") {
       $("#radio_chart_shortage").attr('disabled', true);
       cbsa_subset = cbsa_subset.filter(function (item) {
-        return item.ratio >= 1;
+        return item.ratio >= 0.93;
       })
     };
 
@@ -668,7 +682,7 @@ $(document).ready(function () {
       });
     }
     var l = chartsubData[0].length;
-    h = Math.min(l * 100, 5000);
+    h = Math.min(l * 150, 5000);
     updateChart = [chartsubData[0], forChart];
     drawChart(data = updateChart[1], xcat = updateChart[0], ttype = t, h = h);
   };
@@ -684,7 +698,7 @@ $(document).ready(function () {
       $("#tbl_inst").hide();
       $("#tbl_inst_noshortage").hide();
       $('#tbl_cbsa_noshortage').show();
-      displayCBSA(cbsa_subset, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage', ol = [4, 7, 10]);
+      displayCBSA(cbsa_subset, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage', ol = 4);
     } else if (val_ratio != "2" && tab_inst == 1) {
       $('#tbl_cbsa').hide();
       $('#tbl_cbsa_noshortage').hide();
