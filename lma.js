@@ -463,14 +463,15 @@ $(document).ready(function () {
   var radio_shortage = 0;
   // var chartData;
   var h;
-  var z = cbsa.filter(obj => {
-    return obj.ratio >= 0.93 && obj.ratio < 1
-  });
   // Zero out values outside 95% CI 
   $.each(cbsa, function(index, obj) {
+    obj.ratio = Math.round(obj.ratio * 100)/100;
     if (obj.ratio >= 0.93) {
       obj.shortage = 0;
     }
+  });
+  var z = cbsa.filter(obj => {
+    return obj.ratio >= 0.93 && obj.ratio < 1
   });
   // Modify institutions measure 1 with ratio less than 0.93
   $.each(z, function(index, obj1) {
