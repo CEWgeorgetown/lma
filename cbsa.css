@@ -36,25 +36,25 @@ th[colspan]:not([colspan="1"]) {
     text-align: center;
 }
 
-.dataTables_filter {
-    float: left !important;
+/* div.dt-container {
+    width: 800px;
+    margin: 0 auto;
+} */
+
+th>select {
+    max-width: 120px;
 }
 
-.dataTables_length {
-    float: right !important;
-    /* position: absolute;
-    top: 2%;
-    left: 30%;
-    transform: translate(-50%, -50%); */
-}
 /* Custom CSS for Bootstrap  5 tooltips */
 .tooltip-inner {
-    text-align: left; /* Align text to the left */
-    font-size:  12px; /* Set the desired font size */
+    text-align: left;
+    /* Align text to the left */
+    font-size: 12px;
+    /* Set the desired font size */
 }
 
 .nav-link:hover {
-    background-color:aqua;
+    background-color: aqua;
 }
 
 /* #tbl_inst {

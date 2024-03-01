@@ -3,7 +3,7 @@ var allCBSA = [
   { "data": "Occ" },
   {
     "data": "ratio",
-    render: $.fn.dataTable.render.number(null, null, 2, null, null)
+    render: $.fn.dataTable.render.number(null, '.', 2, null, null)
   },
   {
     "data": "shortage",
@@ -60,43 +60,61 @@ var noshortageCBSA = [
     render: $.fn.dataTable.render.number(',', '.', 0)
   }
 ]
-function displayCBSA(d, showcolumns = allCBSA, div = '#table-cbsa', ol=5) {
+function displayCBSA(d, showcolumns = allCBSA, div = '#table-cbsa', ol = 5) {
 
   $(div).DataTable({
     initComplete: function () {
-      this.api().columns([0, 1]).every(function () {
-        var column = this;
-        var select = $('<select style="width:100px;"><option value="">All</option></select><br>')
-          .appendTo($(column.header()).find('span').empty())
-          .on({
-            'change': function () {
-              var val = $.fn.dataTable.util.escapeRegex(
-                $(this).val()
-              );
-              column
-                .search(val ? '^' + val + '$' : '', true, false)
-                .draw();
-            },
-            'click': function (e) {
-              // stop click event bubbling
-              e.stopPropagation();
-            },
+      $(div + ' thead select').remove();
+      this.api()
+        .columns([0, 1])
+        .every(function () {
+          let column = this;
+
+          // Create select element
+          let select = document.createElement('select');
+          select.add(new Option('All'));
+          column.header().append(select);
+
+          // Apply listener for user change in value
+          select.addEventListener('change', function () {
+            column
+              .search(select.value, { exact: true })
+              .draw();
+          });
+          select.addEventListener('click', function (e) {
+            e.stopPropagation();
           });
 
-        column.data().unique().sort().each(function (d, j) {
-          select.append('<option value="' + d + '">' + d + '</option>')
+          // Add list of options
+          column
+            .data()
+            .unique()
+            .sort()
+            .each(function (d, j) {
+              select.add(new Option(d));
+            });
         });
-      });
     },
-    // dom: 'Bfrtip',
-    // buttons: ['excelHtml5', 'csv', 'pdf'],
+    layout: {
+      bottom2Start: {
+        buttons: [
+          {
+            extend: 'collection',
+            text: 'Export',
+            className: 'custom-html-collection',
+            buttons: ['copy', 'csv', 'excel', 'print']
+          }]
+      },
+      top2End: null,
+      topStart: 'search',
+      topEnd: 'pageLength'
+    },
     columnDefs: [{
       targets: ol,
       className: "outlined-left"
     }],
-        fixedColumns: {
-      left: 2
-    },
+    // responsive: true,
+    // scrollX: true,
     pageLength: 10,
     destroy: true,
     order: [[0, "asc"], [1, "asc"]],
@@ -183,44 +201,58 @@ var noshortageinst = [
 function displayInst(d, showcolumns = allinst, div = '#table-inst', ol = [4, 7, 10]) {
   $(div).DataTable({
     initComplete: function () {
-      this.api().columns([0, 1, 2, 3]).every(function () {
-        var column = this;
-        var select = $('<select style="width:100px;"><option value="">All</option></select><br>')
-          .appendTo($(column.header()).find('span').empty())
-          .on({
-            'change': function () {
-              var val = $.fn.dataTable.util.escapeRegex(
-                $(this).val()
-              );
-              column
-                .search(val ? '^' + val + '$' : '', true, false)
-                .draw();
-            },
-            'click': function (e) {
-              // stop click event bubbling
-              e.stopPropagation();
-            }
+      $(div + ' thead select').remove();
+      this.api()
+        .columns([0, 1, 2, 3])
+        .every(function () {
+          let column = this;
+
+          // Create select element
+          let select = document.createElement('select');
+          select.add(new Option('All'));
+          column.header().append(select);
+
+          // Apply listener for user change in value
+          select.addEventListener('change', function () {
+            column
+              .search(select.value, { exact: true })
+              .draw();
+          });
+          select.addEventListener('click', function (e) {
+            e.stopPropagation();
           });
 
-        column.data().unique().sort().each(function (d, j) {
-          select.append('<option value="' + d + '">' + d + '</option>')
+          // Add list of options
+          column
+            .data()
+            .unique()
+            .sort()
+            .each(function (d, j) {
+              select.add(new Option(d));
+            });
         });
-      });
     },
-    // dom: 'Bfrtip',
-    // dom: '<"top"fl>rt<"bottom"ip><"clear">',
-    // buttons: ['excelHtml5', 'csv', 'pdf'],
+    layout: {
+      bottom2Start: {
+        buttons: [
+          {
+            extend: 'collection',
+            text: 'Export',
+            className: 'custom-html-collection',
+            buttons: ['copy', 'csv', 'excel', 'print']
+          }]
+      },
+      top2End: null,
+      topStart: 'search',
+      topEnd: 'pageLength'
+    },
+    columns: [{ width: '20%' }],
     columnDefs: [{
       targets: ol,
       className: "outlined-left"
     }],
-    // fixedColumns: {
-    //   leftColumns: 4
-    // },
-    // paging: true,
-    // scrollCollapse: true,
+    // responsive: true,
     // scrollX: true,
-    // scrollY: 300,
     pageLength: 10,
     deferRender: true,
     processing: true,
@@ -301,18 +333,18 @@ function drawChart(data = cbsa, xcat, ttype = 1, h = 5000) {
     pf = '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>';
     yf = '{value: , .1f}';
     ya = 'Alignment ratio';
-    mo = function() {
+    mo = function () {
       const chart = this
       chart.title.on('mouseover', e => {
         chart.titleTooltip = this.renderer.label(
-            'Values less than one indicate a shortage in<br> credential production, values greater than <br> one indicate a surplus in credential production,<br> and values equal to one indicate perfect alignment <br> between credential production and occupational<br> demand. See table notes for more details.',
-            200,
-            150,
-            'rectangle'
-          )
+          'Values less than one indicate a shortage in<br> credential production, values greater than <br> one indicate a surplus in credential production,<br> and values equal to one indicate perfect alignment <br> between credential production and occupational<br> demand. See table notes for more details.',
+          200,
+          150,
+          'rectangle'
+        )
           .css({
             color: '#FFFFFF',
-            fontSize: "10px"  
+            fontSize: "10px"
           })
           .attr({
             fill: 'rgba(0, 0, 0, 0.75)',
@@ -445,6 +477,72 @@ function getDataByOcc(occvars) {
 var cmp = function (x, y) {
   return x > y ? 1 : x < y ? -1 : 0;
 };
+function displayDetail(d) {
+  $("#table-prog").DataTable({
+    initComplete: function () {
+      $('#table-prog thead select').remove();
+      this.api()
+        .columns([0, 1, 2])
+        .every(function () {
+          let column = this;
+
+          // Create select element
+          let select = document.createElement('select');
+          select.add(new Option('All'));
+          column.header().append(select);
+
+          // Apply listener for user change in value
+          select.addEventListener('change', function () {
+            column
+              .search(select.value, { exact: true })
+              .draw();
+          });
+          select.addEventListener('click', function (e) {
+            e.stopPropagation();
+          });
+
+          // Add list of options
+          column
+            .data()
+            .unique()
+            .sort()
+            .each(function (d, j) {
+              select.add(new Option(d));
+            });
+        });
+    },
+    layout: {
+      bottom2Start: {
+        buttons: [
+          {
+            extend: 'collection',
+            text: 'Export',
+            className: 'custom-html-collection',
+            buttons: ['copy', 'csv', 'excel', 'print']
+          }]
+      },
+      top2End: null,
+      topStart: 'search',
+      topEnd: 'pageLength'
+    },
+    // responsive: true,
+    // scrollX: true,
+    pageLength: 10,
+    deferRender: true,
+    processing: true,
+    destroy: true,
+    order: [[0, "asc"], [1, "asc"], [2, "asc"], [3, "asc"]],
+    data: d,
+    "columns": [
+      { data: "instn_name" },
+      { data: "occ_group" },
+      { data: "cip2020title" },
+      { data: "num_certs" },
+      { data: "num_aas" },
+      { data: "num_total" }
+    ]
+  });
+}
 $(document).ready(function () {
   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
   const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -464,8 +562,8 @@ $(document).ready(function () {
   // var chartData;
   var h;
   // Zero out values outside 95% CI 
-  $.each(cbsa, function(index, obj) {
-    obj.ratio = Math.round(obj.ratio * 100)/100;
+  $.each(cbsa, function (index, obj) {
+    obj.ratio = Math.round(obj.ratio * 100) / 100;
     if (obj.ratio >= 0.93) {
       obj.shortage = 0;
     }
@@ -474,8 +572,8 @@ $(document).ready(function () {
     return obj.ratio >= 0.93 && obj.ratio < 1
   });
   // Modify institutions measure 1 with ratio less than 0.93
-  $.each(z, function(index, obj1) {
-    $.each(inst, function(index, obj2) {
+  $.each(z, function (index, obj1) {
+    $.each(inst, function (index, obj2) {
       if (obj1.cbsa_name == obj2.cbsa_name && obj1.Occ == obj2.Occ) {
         obj2.inc1 = 0;
       }
@@ -527,7 +625,7 @@ $(document).ready(function () {
   $("#about").show();
   $("#navAbt").css("background-color", "aquamarine");
 
-  $("#begin").on('click' , function() {
+  $("#begin").on('click', function () {
     $("#navSearch").attr('style', 'background-color: aquamarine');
     $("#navCBSA").css("background-color", "");
     $("#navInst").css("background-color", "");
@@ -539,14 +637,14 @@ $(document).ready(function () {
   $("#radio_chart_align").on('click', function () {
     radio_align = 1;
     radio_shortage = 0;
-      chartData = GetChartData(cbsa_subset, 1);
-      drawChart(data = chartData[1], xcat = chartData[0], ttype = 1, h = h);
+    chartData = GetChartData(cbsa_subset, 1);
+    drawChart(data = chartData[1], xcat = chartData[0], ttype = 1, h = h);
   });
   $("#radio_chart_shortage").on('click', function () {
     radio_shortage = 1;
     radio_align = 0;
-      chartData = GetChartData(cbsa_subset, 2);
-      drawChart(data = chartData[1], xcat = chartData[0], ttype = 2, h = h);
+    chartData = GetChartData(cbsa_subset, 2);
+    drawChart(data = chartData[1], xcat = chartData[0], ttype = 2, h = h);
   });
   $("#navSearch").on('click', function () {
     $("#navSearch").attr('style', 'background-color: aquamarine');
@@ -604,14 +702,10 @@ $(document).ready(function () {
     }
   });
 
-//   function toggleInfoBox() {
-//     var infoBox = document.getElementsByClassName('highcharts-title')[0];
-//     var displayStyle = window.getComputedStyle(infoBox).display;
-//     infoBox.style.display = displayStyle === 'none' ? 'block' : 'none';
-// }
+  // var provdtl;
   function getDataForUpdate() {
     $("#search-params").hide();
-   // Check status of radio button
+    // Check status of radio button
     $("input[name=flexRadiocbsa]:checked").each(function () {
       // console.log($(this).val());
       val_ratio = $(this).val();
@@ -629,7 +723,7 @@ $(document).ready(function () {
       cbsa_values.push($(this).next('label').text());
     });
     cbsa_subset = cbsa.filter(item => cbsa_values.includes(item.cbsa_name)).filter(item => occ_values.includes(item.Occ));
-    
+
     if (val_ratio == "0") {
       $("#radio_chart_shortage").attr('disabled', false);
     }
@@ -687,6 +781,8 @@ $(document).ready(function () {
     updateChart = [chartsubData[0], forChart];
     drawChart(data = updateChart[1], xcat = updateChart[0], ttype = t, h = h);
   };
+  var tinst;
+  var tinst_ns;
   function displayUpdatedData() {
     if (val_ratio != "2" && tab_cert == 1) {
       $('#tbl_cbsa_noshortage').hide();
@@ -706,12 +802,37 @@ $(document).ready(function () {
       $("#tbl_inst_noshortage").hide();
       $("#tbl_inst").show();
       displayInst(inst_subset);
+      tinst = $('#table-inst').DataTable();
+      $('#table-inst tbody').on('click', 'tr', function () {
+        var rowData = tinst.row(this).data();
+        console.log(rowData.name);
+        provdtl = rowData.name;
+        var progs_to_show = progs.filter(obj => {
+          return (obj.instn_name == rowData.name & obj.occ_group == rowData.Occ)
+        })
+        // console.log(progs_to_show);
+        $("#modal-prog").modal('show');
+        displayDetail(progs_to_show);
+      });
     } else if (val_ratio == "2" && tab_inst == 1) {
       $('#tbl_cbsa').hide();
       $('#tbl_cbsa_noshortage').hide();
       $("#tbl_inst").hide();
       $("#tbl_inst_noshortage").show();
       displayInst(inst_subset, showcolumns = noshortageinst, div = '#table-inst-noshortage', ol = [4, 7, 10]);
+      tinst_ns = $('#table-inst-noshortage').DataTable();
+      $('#table-inst-noshortage tbody').on('click', 'tr', function () {
+        var rowData = tinst_ns.row(this).data();
+        console.log(rowData.name);
+        provdtl = rowData.name;
+        var progs_to_show = progs.filter(obj => {
+          return (obj.instn_name == rowData.name & obj.occ_group == rowData.Occ)
+        })
+        // console.log(progs_to_show);
+        $("#modal-prog").modal('show');
+        displayDetail(progs_to_show);
+      });
+
     }
   };
 
@@ -736,7 +857,7 @@ $(document).ready(function () {
     $("#all-vis").hide();
   });
   $("#navInst").on('click', function () {
-    tab_inst=1;
+    tab_inst = 1;
     tab_cert = 0;
     $("#about").hide();
     $("#navInst").attr('style', 'background-color: aquamarine');
@@ -763,7 +884,7 @@ $(document).ready(function () {
     // }
   });
   $("#navCBSA").on('click', function () {
-    tab_cert=1;
+    tab_cert = 1;
     tab_inst = 0;
     $("#about").hide();
     $("#navCBSA").attr('style', 'background-color: aquamarine');
@@ -774,31 +895,63 @@ $(document).ready(function () {
     getDataForUpdate();
     displayUpdatedData();
     $("#chart-col").show();
-  // drawChart(chartData[1], chartData[0]);
-  // $("#tbl_inst").hide();
-  //     if (val_ratio != "2") {
-  //       $('#tbl_cbsa_noshortage').hide();
-  //       $("#tbl_inst_shortage").hide();
-  //       $("#tbl_inst_noshortage").hide();
-  //       $('#tbl_cbsa').show();
-  //       displayCBSA(cbsa_subset);
-  //     } else if (val_ratio == "2") {
-  //       $('#tbl_cbsa').hide();
-  //       $("#tbl_inst_shortage").hide();
-  //       $("#tbl_inst_noshortage").hide();
-  //       $('#tbl_cbsa_noshortage').show();
-  //       displayCBSA(cbsa_subset, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage', ol = [4, 7, 10]);
-  //     }
+    // drawChart(chartData[1], chartData[0]);
+    // $("#tbl_inst").hide();
+    //     if (val_ratio != "2") {
+    //       $('#tbl_cbsa_noshortage').hide();
+    //       $("#tbl_inst_shortage").hide();
+    //       $("#tbl_inst_noshortage").hide();
+    //       $('#tbl_cbsa').show();
+    //       displayCBSA(cbsa_subset);
+    //     } else if (val_ratio == "2") {
+    //       $('#tbl_cbsa').hide();
+    //       $("#tbl_inst_shortage").hide();
+    //       $("#tbl_inst_noshortage").hide();
+    //       $('#tbl_cbsa_noshortage').show();
+    //       displayCBSA(cbsa_subset, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage', ol = [4, 7, 10]);
+    //     }
   });
-  $('[data-bs-toggle="tooltip"]').each(function() {
+  $('[data-bs-toggle="tooltip"]').each(function () {
     var tooltip = new bootstrap.Tooltip(this);
 
     // Attach click event to hide tooltip after a delay
-    $(this).on('click', function() {
-      setTimeout(function() {
+    $(this).on('click', function () {
+      setTimeout(function () {
         tooltip.hide();
-      },  2000); // Delay in milliseconds
+      }, 2000); // Delay in milliseconds
     });
   });
+  // var tcbsa = $('#table-cbsa').DataTable();
+  // var tcbsans = $('#table-cbsa-noshortage').DataTable();
+  // var tinst = $('#table-inst').DataTable();
+  // var tinstns = $('#table-inst-noshortage').DataTable();
+  // if (tcbsa instanceof $.fn.dataTable.Api) {
+  //   console.log('Instance')
+  // }
+  // if (!$.fn.dataTable.isDataTable('#table-cbsa')) {
+  //   // $('#table-cbsa').DataTable();
+  //   console.log('Not');
+  // }
 
+  // $('#table-cbsa tbody').on('click', 'tr', function () {
+  //   var rowData1 = tcbsa.rows().data();
+  //   console.log(rowData1.toArray());
+  // });
+  // $('#table-cbsa-noshortage tbody').on('click', 'tr', function () {
+  //   var rowData2 = tcbsans.row(this).data();
+  //   console.log(rowData2);
+  // });
+  // $('#table-inst tbody').on('click', 'tr', function () {
+  //   var rowData3 = tinst.row(this).data();
+  //   console.log(rowData3);
+  // });
+  // $('#table-inst-noshortage tbody').on('click', 'tr', function () {
+  //   var rowData4 = tinstns.row(this).data();
+  //   console.log(rowData4);
+  // });
+  // $('#table-inst tbody').on('click', 'tr:not(.clicked)', function () {
+  //   $(this).addClass('clicked');
+  //   console.log(table.row(this));
+  //   var data = table.row(this).data();
+  // });
 });
