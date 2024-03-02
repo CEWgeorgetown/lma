@@ -253,6 +253,9 @@ function displayInst(d, showcolumns = allinst, div = '#table-inst', ol = [4, 7, 
     }],
     // responsive: true,
     // scrollX: true,
+    rowCallback: function (row, data) {
+      $(row).attr('title', 'Click for details');
+    },
     pageLength: 10,
     deferRender: true,
     processing: true,
@@ -805,8 +808,7 @@ $(document).ready(function () {
       tinst = $('#table-inst').DataTable();
       $('#table-inst tbody').on('click', 'tr', function () {
         var rowData = tinst.row(this).data();
-        console.log(rowData.name);
-        provdtl = rowData.name;
+        // console.log(rowData.name);
         var progs_to_show = progs.filter(obj => {
           return (obj.instn_name == rowData.name & obj.occ_group == rowData.Occ)
         })
@@ -823,8 +825,7 @@ $(document).ready(function () {
       tinst_ns = $('#table-inst-noshortage').DataTable();
       $('#table-inst-noshortage tbody').on('click', 'tr', function () {
         var rowData = tinst_ns.row(this).data();
-        console.log(rowData.name);
-        provdtl = rowData.name;
+        // console.log(rowData.name);
         var progs_to_show = progs.filter(obj => {
           return (obj.instn_name == rowData.name & obj.occ_group == rowData.Occ)
         })
