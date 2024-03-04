@@ -810,7 +810,7 @@ $(document).ready(function () {
         var rowData = tinst.row(this).data();
         // console.log(rowData.name);
         var progs_to_show = progs.filter(obj => {
-          return (obj.instn_name == rowData.name & obj.occ_group == rowData.Occ)
+          return (obj.cbsa_name == rowData.cbsa_name & obj.instn_name == rowData.name & obj.occ_group == rowData.Occ)
         })
         // console.log(progs_to_show);
         $("#modal-prog").modal('show');
