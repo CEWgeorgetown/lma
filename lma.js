@@ -827,7 +827,7 @@ $(document).ready(function () {
         var rowData = tinst_ns.row(this).data();
         // console.log(rowData.name);
         var progs_to_show = progs.filter(obj => {
-          return (obj.instn_name == rowData.name & obj.occ_group == rowData.Occ)
+          return (obj.cbsa_name == rowData.cbsa_name & obj.instn_name == rowData.name & obj.occ_group == rowData.Occ)
         })
         // console.log(progs_to_show);
         $("#modal-prog").modal('show');
@@ -870,19 +870,6 @@ $(document).ready(function () {
     $("#tbl_cbsa").hide();
     getDataForUpdate();
     displayUpdatedData();
-    //   if (val_ratio != "2") {
-    //     $('#tbl_cbsa').hide();
-    //     $('#tbl_cbsa_noshortage').hide();
-    //     $("#tbl_inst_noshortage").hide();
-    //     $("#tbl_inst").show();
-    //     displayInst(inst_subset);
-    //   } else if (val_ratio == "2") {
-    //     $('#tbl_cbsa').hide();
-    //     $('#tbl_cbsa_noshortage').hide();
-    //     $("#tbl_inst").hide();
-    //     $("#tbl_inst_noshortage").show();
-    //     displayInst(inst_subset, showcolumns = noshortageinst, div = '#table-inst-noshortage', ol = [4, 7, 10]);
-    // }
   });
   $("#navCBSA").on('click', function () {
     tab_cert = 1;
@@ -896,21 +883,6 @@ $(document).ready(function () {
     getDataForUpdate();
     displayUpdatedData();
     $("#chart-col").show();
-    // drawChart(chartData[1], chartData[0]);
-    // $("#tbl_inst").hide();
-    //     if (val_ratio != "2") {
-    //       $('#tbl_cbsa_noshortage').hide();
-    //       $("#tbl_inst_shortage").hide();
-    //       $("#tbl_inst_noshortage").hide();
-    //       $('#tbl_cbsa').show();
-    //       displayCBSA(cbsa_subset);
-    //     } else if (val_ratio == "2") {
-    //       $('#tbl_cbsa').hide();
-    //       $("#tbl_inst_shortage").hide();
-    //       $("#tbl_inst_noshortage").hide();
-    //       $('#tbl_cbsa_noshortage').show();
-    //       displayCBSA(cbsa_subset, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage', ol = [4, 7, 10]);
-    //     }
   });
   $('[data-bs-toggle="tooltip"]').each(function () {
     var tooltip = new bootstrap.Tooltip(this);
@@ -922,37 +894,4 @@ $(document).ready(function () {
       }, 2000); // Delay in milliseconds
     });
   });
-  // var tcbsa = $('#table-cbsa').DataTable();
-  // var tcbsans = $('#table-cbsa-noshortage').DataTable();
-  // var tinst = $('#table-inst').DataTable();
-  // var tinstns = $('#table-inst-noshortage').DataTable();
-  // if (tcbsa instanceof $.fn.dataTable.Api) {
-  //   console.log('Instance')
-  // }
-  // if (!$.fn.dataTable.isDataTable('#table-cbsa')) {
-  //   // $('#table-cbsa').DataTable();
-  //   console.log('Not');
-  // }
-
-  // $('#table-cbsa tbody').on('click', 'tr', function () {
-  //   var rowData1 = tcbsa.rows().data();
-  //   console.log(rowData1.toArray());
-  // });
-  // $('#table-cbsa-noshortage tbody').on('click', 'tr', function () {
-  //   var rowData2 = tcbsans.row(this).data();
-  //   console.log(rowData2);
-  // });
-  // $('#table-inst tbody').on('click', 'tr', function () {
-  //   var rowData3 = tinst.row(this).data();
-  //   console.log(rowData3);
-  // });
-  // $('#table-inst-noshortage tbody').on('click', 'tr', function () {
-  //   var rowData4 = tinstns.row(this).data();
-  //   console.log(rowData4);
-  // });
-  // $('#table-inst tbody').on('click', 'tr:not(.clicked)', function () {
-  //   $(this).addClass('clicked');
-  //   console.log(table.row(this));
-  //   var data = table.row(this).data();
-  // });
 });
