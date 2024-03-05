@@ -24,7 +24,7 @@ body {
     margin: 0 auto;
 }
 
-#spdtl {
+.spdtl {
     font-size: smaller;
     color: darkcyan;
 }
