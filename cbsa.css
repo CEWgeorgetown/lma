@@ -29,6 +29,12 @@ body {
     color: darkcyan;
 }
 
+.fpdtl {
+    /* font-size: smaller; */
+    color: #000;
+    font-style: italic;
+}
+
 table {
     border-collapse: collapse;
 }
