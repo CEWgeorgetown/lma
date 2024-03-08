@@ -72,7 +72,7 @@ function displayCBSA(d, showcolumns = allCBSA, div = '#table-cbsa', ol = 5) {
 
           // Create select element
           let select = document.createElement('select');
-          select.add(new Option('All'));
+          select.add(new Option('All', ''));
           column.header().append(select);
 
           // Apply listener for user change in value
@@ -209,7 +209,7 @@ function displayInst(d, showcolumns = allinst, div = '#table-inst', ol = [4, 7, 
 
           // Create select element
           let select = document.createElement('select');
-          select.add(new Option('All'));
+          select.add(new Option('All', ''));
           column.header().append(select);
 
           // Apply listener for user change in value
