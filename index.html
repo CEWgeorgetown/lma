@@ -50,6 +50,7 @@
   <script src="//code.highcharts.com/modules/annotations.js"></script>
   <script src="//code.highcharts.com/modules/no-data-to-display.js"></script>
   <script type="text/javascript" src="cbsal.js"></script> <!-- data for CBSA -->
+  <script type="text/javascript" src="cbsadtl.js"></script> <!-- data for CBSA drill down -->
   <script type="text/javascript" src="instl.js"></script> <!-- data for Insitutions -->
   <script type="text/javascript" src="progs.js"></script> <!-- data for Programs -->
   <script type="text/javascript" src="lma.js"></script> <!-- main program -->
@@ -179,8 +180,7 @@
                   <!-- <th colspan="5"></th> -->
                   <th colspan="2" data-dt-order="disable"></th>
                   <th colspan="2" data-dt-order="disable"><span class="spdtl">See notes below the table for guidance on
-                      interpreting the
-                      data</span></th>
+                      interpreting the data</span></th>
                   <th colspan="1" data-dt-order="disable"></th>
                   <th colspan="3" data-dt-order="disable">Annual job openings</th>
                 </tr>
@@ -196,23 +196,14 @@
                   <th data-bs-toggle="tooltip" data-bs-html="true"
                     data-bs-title="The metro area’s <b>ratio of</b> the annual <b>number of credentials</b> produced that align with high-paying middle-skills occupations within the occupational group to the projected annual <b>number of job openings</b> available in all occupations for workers with those credentials. <em>See footnote for details.</em>">
                     Credentials-to-jobs ratio<sup>&dagger;1</sup>
-                    <!-- <span class="spdtl">Values less than one indicate a shortage in credential production, values
-                      greater than one
-                      indicate a surplus in credential production, and values equal to one indicate perfect alignment
-                      between credential production and future occupational demand. To account for the margin of error
-                      in the estimated ratio values, we identify true credential shortages as those where the
-                      credentials-to-jobs ratio is less than 0.93.</span> -->
                   </th>
                   <th data-bs-toggle="tooltip" data-bs-html="true"
                     data-bs-title="The metro area’s <b>difference</b> between the annual <b>number of credentials</b> produced that align with high-paying middle-skills occupations within the occupational group and the projected annual <b>number of job openings</b> available in all occupations for middle-skills workers with those credentials. <em>See footnote for details.</em>">
                     Annual credential shortage<sup>&dagger;2</sup>
-                    <!-- <span class="spdtl">Values are only reported when the credentials-to-jobs ratio within the
-                      occupational group is
-                      less than 0.93</span> -->
                   </th>
                   <th data-bs-toggle="tooltip" data-bs-html="true"
                     data-bs-title="The total annual number of middle-skills credentials (certificates and associate’s degrees) awarded in the metro area that align with high-paying occupations in the occupational group">
-                    Annual credentials awarded
+                    Annual credentials awarded<br><span class="spdtl">Click on metro area for detail by program</span>
                   </th>
                   <th data-bs-toggle="tooltip" data-bs-html="true"
                     data-bs-title="The <b>projected annual number of overall job openings</b> (both high-paying and lower-paying) available to middle-skills workers with credentials that align with high-paying occupations in the occupational group">
@@ -238,9 +229,9 @@
                 greater than one indicate a surplus in credential production, and values equal to one indicate perfect
                 alignment between credential production and future occupational demand. To account for the margin of
                 error in the estimated ratio values, we identify true credential shortages as those where the
-                credentials-to-jobs ratio is less than 0.93.</span><br>
+                credentials-to-jobs ratio is less than 1.</span><br>
               <sup>&dagger;2</sup> <span class="fpdtl">Values are only reported when the credentials-to-jobs ratio
-                within the occupational group is less than 0.93.</span><br>
+                within the occupational group is less than 1.</span><br>
             </div>
 
           </div>
@@ -251,8 +242,7 @@
                   <!-- <th colspan="4"></th> -->
                   <th colspan="2" data-dt-order="disable"></th>
                   <th colspan="1" data-dt-order="disable"><span class="spdtl">See notes below the table for guidance on
-                      interpreting the
-                      data</span></th>
+                      interpreting the data</span></th>
                   <th colspan="1" data-dt-order="disable"></th>
                   <th colspan="3" data-dt-order="disable">Annual job openings</th>
                 </tr>
@@ -268,16 +258,10 @@
                   <th data-bs-toggle="tooltip" data-bs-html="true"
                     data-bs-title="The metro area’s <b>ratio</b> of the annual <b>number of credentials</b> produced that align with high-paying middle-skills occupations within the occupational group to the projected annual <b>number of job openings</b> available in all occupations for workers with those credentials. <em>See footnote for details.</em>">
                     Credentials-to-jobs ratio<sup>&dagger;1</sup>
-                    <!-- <span class="spdtl">Values less than one indicate a shortage in credential production, values
-                      greater than one
-                      indicate a surplus in credential production, and values equal to one indicate perfect alignment
-                      between credential production and future occupational demand. To account for the margin of error
-                      in the estimated ratio values, we identify true credential shortages as those where the
-                      credentials-to-jobs ratio is less than 0.93</span> -->
                   </th>
                   <th data-bs-toggle="tooltip" data-bs-html="true"
                     data-bs-title="The <b>total annual number of middle-skills credentials</b> (certificates and associate’s degrees) awarded in the metro area that align with high-paying occupations in the occupational group">
-                    Annual credentials awarded
+                    Annual credentials awarded<br><span class="spdtl">Click on metro area for detail by program</span>
                   </th>
                   <th data-bs-toggle="tooltip" data-bs-html="true"
                     data-bs-title="The <b>projected annual number of overall job openings</b> (both high-paying and lower-paying) available to middle-skills workers with credentials that align with high-paying occupations in the occupational group">
@@ -298,9 +282,7 @@
             <div><sup>&dagger;1</sup>
               <span class="fpdtl">Values less than one indicate a shortage in credential production, values
                 greater than one indicate a surplus in credential production, and values equal to one indicate perfect
-                alignment between credential production and future occupational demand. To account for the margin of
-                error in the estimated ratio values, we identify true credential shortages as those where the
-                credentials-to-jobs ratio is less than 0.93.</span><br>
+                alignment between credential production and future occupational demand.</span><br>
             </div>
 
           </div>
@@ -312,12 +294,11 @@
                 <tr>
                   <th colspan="4" data-dt-order="disable"></th>
                   <th colspan="3" data-dt-order="disable">Annual credentials awarded </th>
-                  <th colspan="3" data-dt-order="disable">Annual credentials aligned with high-paying
-                    occupations<br><span class="spdtl">Click
-                      on provider for detail by program</span></th>
+                  <th colspan="3" data-dt-order="disable">Annual credentials aligned with high-paying occupations<br>
+                    <span class="spdtl">Click on provider for detail by program</span>
+                  </th>
                   <th colspan="2" data-dt-order="disable"><span class="spdtl">See notes below the table for guidance on
-                      interpreting the
-                      data</span></th>
+                      interpreting the data</span></th>
                 </tr>
                 <tr>
                   <th data-bs-toggle="tooltip" data-bs-html="true"
@@ -365,8 +346,6 @@
                   <th data-bs-toggle="tooltip" data-bs-html="true"
                     data-bs-title="Based on its current production share of credentials <b>aligned with high-paying occupations</b> in the occupational group, provider would <b>need to increase production of these credentials by x</b> to address the metro area’s credential shortage. <em>See footnote for details.</em>">
                     Provider’s potential contribution to addressing credential shortage<sup>&dagger;1</sup> <br>
-                    <!-- <span class="spdtl">Values are only reported when the metro area’s credentials-to-jobs ratio within
-                      the occupational group is less than 0.93</span> -->
                   </th>
                   <!-- <th>Measure 2</th> -->
                 </tr>
@@ -375,7 +354,7 @@
             </table>
             <div>
               <span class="fpdtl"><sup>&dagger;1</sup>Values are only reported when the metro area’s credentials-to-jobs
-                ratio within the occupational group is less than 0.93.</span>
+                ratio within the occupational group is less than 1.</span>
             </div>
 
           </div>
@@ -385,9 +364,9 @@
                 <tr>
                   <th colspan="4" data-dt-order="disable"></th>
                   <th colspan="3" data-dt-order="disable">Annual credentials awarded </th>
-                  <th colspan="3" data-dt-order="disable">Annual credentials aligned with high-paying
-                    occupations<br><span class="spdtl">Click
-                      on provider for detail by program</span></th>
+                  <th colspan="3" data-dt-order="disable">Annual credentials aligned with high-paying occupations<br>
+                    <span class="spdtl">Click on provider for detail by program</span>
+                  </th>
                   <th colspan="1" data-dt-order="disable"><span class="spdtl">See notes below the table for guidance on
                       interpreting the
                       data</span></th>
@@ -443,7 +422,7 @@
             </table>
             <div>
               <span class="fpdtl"><sup>&dagger;1</sup>Values are only reported when the metro area’s credentials-to-jobs
-                ratio within the occupational group is less than 0.93.</span>
+                ratio within the occupational group is less than 1.</span>
             </div>
           </div>
         </div> <!-- row/inst table -->
@@ -492,7 +471,7 @@
         job. These high-paying occupations are found in five occupational groups: management, STEM, healthcare,
         protective services, and blue-collar jobs. </p>
       <p>View a complete list of high-paying middle-skills occupations <a
-          href="List of high-paying occupations and aligned programs.pdf">here</a>. </p>
+          href="List of high-paying occupations.pdf">here</a>. </p>
       <h3>Measuring credentials-to-jobs alignment</h3>
       <p>The alignment metrics displayed in the tool are based on the program of study-to-occupation (CIP-SOC)
         crosswalk developed by the US Bureau of Labor Statistics and US Department of Education. Using the
@@ -560,6 +539,37 @@
                 <thead>
                   <tr>
                     <th>Provider</th>
+                    <th>Occupational group</th>
+                    <th>Program</th>
+                    <th>Number of certificates</th>
+                    <th>Number of associate’s degrees</th>
+                    <th>Total awards</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal modal-xl" id="modal-cbsa" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">CBSA's annual credential production by program of study</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="table-cbsa-detail" class="pt-2">
+              <table id="table-cbsa-modal" class="display" style="width:100%">
+                <thead>
+                  <tr>
+                    <th>CBSA</th>
                     <th>Occupational group</th>
                     <th>Program</th>
                     <th>Number of certificates</th>

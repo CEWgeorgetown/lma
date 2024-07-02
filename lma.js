@@ -585,6 +585,72 @@ function displayDetail(d) {
   });
 }
 
+function displayCBSADetail(d) {
+  $("#table-cbsa-modal").DataTable({
+    initComplete: function () {
+      $('#table-cbsa-modalthead select').remove();
+      this.api()
+        .columns([1, 2])
+        .every(function () {
+          let column = this;
+
+          // Create select element
+          let select = document.createElement('select');
+          select.add(new Option('All'));
+          column.header().append(select);
+
+          // Apply listener for user change in value
+          select.addEventListener('change', function () {
+            column
+              .search(select.value, { exact: true })
+              .draw();
+          });
+          select.addEventListener('click', function (e) {
+            e.stopPropagation();
+          });
+
+          // Add list of options
+          column
+            .data()
+            .unique()
+            .sort()
+            .each(function (d, j) {
+              select.add(new Option(d));
+            });
+        });
+    },
+    layout: {
+      bottom2Start: {
+        buttons: [
+          {
+            extend: 'collection',
+            text: 'Export',
+            className: 'custom-html-collection',
+            buttons: ['copy', 'csv', 'excel', 'print']
+          }]
+      },
+      top2End: null,
+      topStart: 'search',
+      topEnd: 'pageLength'
+    },
+    // responsive: true,
+    pageLength: 10,
+    deferRender: true,
+    processing: true,
+    destroy: true,
+    order: [[0, "asc"], [1, "asc"], [2, "asc"], [3, "asc"]],
+    data: d,
+    "columns": [
+      { data: "cbsa_name" },
+      { data: "occ_group" },
+      { data: "cip2020title" },
+      { data: "num_certs" },
+      { data: "num_aas" },
+      { data: "num_total" }
+    ]
+  });
+}
+
 // function to show/hide contents of Home tab
 function showHome(show = true) {
   if (show) {
@@ -679,12 +745,26 @@ function showModalData(div) {
   });
 }
 
+// function to get data from CBSA row to show modal data
+let dtCBSA = null; // has to be declared outside in order for it to persist
+function showCBSAModalData(div) {
+  dtCBSA = $(div).DataTable();
+  $(div + ' tbody').on('click', 'tr', function () {
+    let rowData = dtCBSA.row(this).data();
+    let cbsaToShow = cbsaDtl.filter(obj => {
+      return (obj.cbsa_name == rowData.cbsa_name & obj.occ_group == rowData.Occ)
+    })
+    $("#modal-cbsa").modal('show');
+    displayCBSADetail(cbsaToShow);
+  });
+}
+
 // Values for metro types/alignments
 const CBSA_ALL = "0";
 const CBSA_SHORTAGE = "1";
 const CBSA_NOSHORTAGE = "2";
 // Set threshold for shortage
-const CONF_INT_VAL = 0.93;
+const CONF_INT_VAL = 1;
 
 function getSearchParams() {
   // Check all search parameters for selection
@@ -891,9 +971,14 @@ $(document).ready(function () {
     if (dataToUse.cbsaType != CBSA_NOSHORTAGE) {
       showShortageTables(show = true, onlycbsa = true, onlyinst = false);
       displayCBSA(dataToUse.cbsaData, showcolumns = allCBSA, div = '#table-cbsa', ol = 5);
+      // Processing for pop up when data row is clicked
+      showCBSAModalData('#table-cbsa');
+
     } else {
       showNoShortageTables(show = true, onlycbsa = true, onlyinst = false);
       displayCBSA(dataToUse.cbsaData, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage', ol = 4);
+      // Processing for pop up when data row is clicked
+      showCBSAModalData('#table-cbsa-noshortage');
     }
   });
   $("#nav-inst").on('click', function () {
