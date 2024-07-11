@@ -588,7 +588,7 @@ function displayDetail(d) {
 function displayCBSADetail(d) {
   $("#table-cbsa-modal").DataTable({
     initComplete: function () {
-      $('#table-cbsa-modalthead select').remove();
+      $('#table-cbsa-modal thead select').remove();
       this.api()
         .columns([1, 2])
         .every(function () {
