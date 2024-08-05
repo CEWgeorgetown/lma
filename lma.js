@@ -307,11 +307,6 @@ function displayInst(d, showcolumns, div, ol) {
 Highcharts.setOptions({
   lang: {
     thousandsSep: ','
-  },
-  chart: {
-    style: {
-      fontFamily: 'Open Sans'
-    }
   }
 });
 
