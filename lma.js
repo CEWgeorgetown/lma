@@ -99,6 +99,7 @@ function displayCBSA(d, showcolumns, div, ol) {
 
           // Create select element
           let select = document.createElement('select');
+          select.name = "table-filter";
           select.add(new Option('All', ''));
           column.header().append(select);
 
@@ -248,6 +249,7 @@ function displayInst(d, showcolumns, div, ol) {
 
           // Create select element
           let select = document.createElement('select');
+          select.name = "table-filter";
           select.add(new Option('All', ''));
           column.header().append(select);
 
@@ -525,6 +527,7 @@ function displayDetail(d) {
 
           // Create select element
           let select = document.createElement('select');
+          select.name = "table-filter";
           select.add(new Option('All'));
           column.header().append(select);
 
@@ -591,6 +594,7 @@ function displayCBSADetail(d) {
 
           // Create select element
           let select = document.createElement('select');
+          select.name = "table-filter";
           select.add(new Option('All'));
           column.header().append(select);
 
@@ -896,7 +900,7 @@ function fillCBSADropdown() {
   $.each(cbsaNames, function (i, value) {
     let li = $("<li class='list-group-item'></li>");
     let input = $("<input class='form-check-input me-2' type='checkbox' value='" + i + "' id='chk-cbsa-" + i + "'>");
-    let label = $("<label class='form-check-label'>" + cbsaNames[i] + "</label>");
+    let label = $("<label class='form-check-label' for='chk-cbsa-" + i + "'>" + cbsaNames[i] + "</label>");
     li.append(input, label);
     list.append(li);
   });
