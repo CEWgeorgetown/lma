@@ -309,7 +309,8 @@ function displayInst(d, showcolumns, div, ol) {
 Highcharts.setOptions({
   lang: {
     thousandsSep: ','
-  }
+  },
+  colors: ["#B9D9EC", "#144175", "#F9A21C", "#266150", "#DE354C"]
 });
 
 // Function to create data objects for barcharts using Highcharts library
@@ -653,8 +654,8 @@ function displayCBSADetail(d) {
 // function to show/hide contents of Home tab
 function showHome(show = true) {
   if (show) {
-    $("#nav-abt").css("background-color", "aquamarine");
-    $("#nav-search").css("background-color", "");
+    $("#nav-abt").css("background-color", "#B9D9EC");
+    // $("#nav-search").css("background-color", "");
     $("#nav-cbsa").css("background-color", "");
     $("#nav-inst").css("background-color", "");
     $("#about").show();
@@ -710,13 +711,13 @@ function initializeSearchParams() {
 // function to show elements of search tab
 function showSearchParams(show = false) {
   if (show) {
-    $("#nav-search").css("background-color", "aquamarine");
+    // $("#nav-search").css("background-color", "aquamarine");
     $("#nav-cbsa").css("background-color", "");
     $("#nav-inst").css("background-color", "");
     $("#nav-abt").css("background-color", "");
     $("#search-params").show();
   } else {
-    $("#nav-search").css("background-color", "");
+    // $("#nav-search").css("background-color", "");
     $("#search-params").hide();
   }
 }
@@ -922,7 +923,7 @@ $(document).ready(function () {
   showNoShortageTables(false);
   showShortageTables(false);
   initializeSearchParams();
-  showSearchParams(false);
+  // showSearchParams(false);
   showChart(false);
 
   // 3. initialize data in case user goes straight to cbsa and provider tabs instead of search tab
@@ -936,24 +937,24 @@ $(document).ready(function () {
     showHome(true);
     showNoShortageTables(false);
     showShortageTables(false);
-    showSearchParams(false);
+    // showSearchParams(false);
     showChart(false);
   });
-  $("#nav-search").on('click', function () {
-    // show only search fields and controls
-    showSearchParams(true);
-    showHome(false);
-    showChart(false);
-    showNoShortageTables(false);
-    showShortageTables(false);
-  });
+  // $("#nav-search").on('click', function () {
+  //   // show only search fields and controls
+  //   // showSearchParams(true);
+  //   showHome(false);
+  //   showChart(false);
+  //   showNoShortageTables(false);
+  //   showShortageTables(false);
+  // });
 
   $("#nav-cbsa").on('click', function () {
     // get data to show chart and cbsa tables
-    showSearchParams(false);
+    // showSearchParams(false);
     showHome(false);
 
-    $("#nav-cbsa").css("background-color", "aquamarine");
+    $("#nav-cbsa").css("background-color", "#B9D9EC");
     $("#nav-inst").css("background-color", "");
 
     // Disable shortage radio button for chart
@@ -982,12 +983,12 @@ $(document).ready(function () {
   });
   $("#nav-inst").on('click', function () {
     // get data to show institution tables and provider details in popup
-    showSearchParams(false);
+    // showSearchParams(false);
     showHome(false);
     showChart(false);
 
     $("#nav-cbsa").css("background-color", "");
-    $("#nav-inst").css("background-color", "aquamarine");
+    $("#nav-inst").css("background-color", "#B9D9EC");
 
     if (dataToUse.cbsaType != CBSA_NOSHORTAGE) {
       showShortageTables(show = true, onlycbsa = false, onlyinst = true);
@@ -1006,7 +1007,7 @@ $(document).ready(function () {
   // "Begin exploring" brings user to search page
   $("#begin").on('click', function () {
     showHome(false);
-    showSearchParams(true);
+    // showSearchParams(true);
   });
   // "Update" button gets all the parameters from the search tab and shows the results on the CBSA tab
   $("#btn-update").on("click", function () {

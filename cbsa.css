@@ -7,12 +7,12 @@ body {
     border-color: darkgray !important;
 }
 
-#list_cbsa {
-    height: 400px;
+#list-cbsa {
+    max-height: 200px;
     overflow-y: auto;
 }
 
-#list_occ {
+#list-occ {
     height: 200px;
     /* overflow-y: auto; */
 }
