@@ -20,13 +20,13 @@ const allCBSA = [
   { "data": "Occ" },
   {
     "data": "ratio",
-    render: $.fn.dataTable.render.number(null, '.', 2, null, null)
+    render: $.fn.dataTable.render.number(null, ".", 2, null, null)
   },
   {
     "data": "shortage",
     // defaultContent: NaN,
     defaultContent: 0,
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
     // This converts to strings so it doesn't work
     // render: function (data, type, row) {
     //   if (isNaN(data)) {
@@ -38,19 +38,19 @@ const allCBSA = [
   },
   {
     "data": "num_awards",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "no_tot",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "no_hp",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "no_lp",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   }
 ]
 
@@ -64,19 +64,19 @@ const noshortageCBSA = [
   },
   {
     "data": "num_awards",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "no_tot",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "no_hp",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "no_lp",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   }
 ]
 
@@ -91,25 +91,25 @@ function displayCBSA(d, showcolumns, div, ol) {
 
   $(div).DataTable({
     initComplete: function () {
-      $(div + ' thead select').remove();
+      $(div + " thead select").remove();
       this.api()
         .columns([0, 1])
         .every(function () {
           let column = this;
 
           // Create select element
-          let select = document.createElement('select');
+          let select = document.createElement("select");
           select.name = "table-filter";
-          select.add(new Option('All', ''));
+          select.add(new Option("All", ""));
           column.header().append(select);
 
           // Apply listener for user change in value
-          select.addEventListener('change', function () {
+          select.addEventListener("change", function () {
             column
               .search(select.value, { exact: true })
               .draw();
           });
-          select.addEventListener('click', function (e) {
+          select.addEventListener("click", function (e) {
             e.stopPropagation();
           });
 
@@ -123,26 +123,27 @@ function displayCBSA(d, showcolumns, div, ol) {
             });
         });
     },
+    lengthMenu: [5, 10, 20, 50],
     layout: {
       bottom2Start: {
         buttons: [
           {
-            extend: 'collection',
-            text: 'Export',
-            className: 'custom-html-collection',
-            buttons: ['copy', 'csv', 'excel', 'print']
+            extend: "collection",
+            text: "Export",
+            className: "custom-html-collection",
+            buttons: ["copy", "csv", "excel", "print"]
           }]
       },
       top2End: null,
-      topStart: 'search',
-      topEnd: 'pageLength'
+      topStart: "search",
+      topEnd: "pageLength"
     },
     columnDefs: [{
       targets: ol,
       className: "outlined-left"
     }],
     // responsive: true,
-    pageLength: 10,
+    pageLength: 5,
     destroy: true,
     order: [[0, "asc"], [1, "asc"]],
     data: d,
@@ -158,37 +159,37 @@ const allinst = [
   { "data": "sector" },
   {
     "data": "acert",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "aaas",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "ams",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "achp",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "aahp",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "amhp",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "pcbsa",
     render: function (data, type, row) {
-      return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + '%';
+      return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + "%";
     }
   },
   {
     "data": "inc1",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   }
 ]
 
@@ -200,32 +201,32 @@ const noshortageinst = [
   { "data": "sector" },
   {
     "data": "acert",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "aaas",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "ams",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "achp",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "aahp",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "amhp",
-    render: $.fn.dataTable.render.number(',', '.', 0)
+    render: $.fn.dataTable.render.number(",", ".", 0)
   },
   {
     "data": "pcbsa",
     render: function (data, type, row) {
-      return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + '%';
+      return parseFloat(Math.round(data * 1000) / 10).toFixed(1) + "%";
     }
   }
 ]
@@ -241,25 +242,25 @@ function displayInst(d, showcolumns, div, ol) {
 
   $(div).DataTable({
     initComplete: function () {
-      $(div + ' thead select').remove();
+      $(div + " thead select").remove();
       this.api()
         .columns([0, 1, 2, 3])
         .every(function () {
           let column = this;
 
           // Create select element
-          let select = document.createElement('select');
+          let select = document.createElement("select");
           select.name = "table-filter";
-          select.add(new Option('All', ''));
+          select.add(new Option("All", ""));
           column.header().append(select);
 
           // Apply listener for user change in value
-          select.addEventListener('change', function () {
+          select.addEventListener("change", function () {
             column
               .search(select.value, { exact: true })
               .draw();
           });
-          select.addEventListener('click', function (e) {
+          select.addEventListener("click", function (e) {
             e.stopPropagation();
           });
 
@@ -273,29 +274,30 @@ function displayInst(d, showcolumns, div, ol) {
             });
         });
     },
+    lengthMenu: [5, 10, 20, 50],
     layout: {
       bottom2Start: {
         buttons: [
           {
-            extend: 'collection',
-            text: 'Export',
-            className: 'custom-html-collection',
-            buttons: ['copy', 'csv', 'excel', 'print']
+            extend: "collection",
+            text: "Export",
+            className: "custom-html-collection",
+            buttons: ["copy", "csv", "excel", "print"]
           }]
       },
       top2End: null,
-      topStart: 'search',
-      topEnd: 'pageLength'
+      topStart: "search",
+      topEnd: "pageLength"
     },
-    columns: [{ width: '20%' }],
+    columns: [{ width: "20%" }],
     columnDefs: [{
       targets: ol,
       className: "outlined-left"
     }],
     rowCallback: function (row, data) {
-      $(row).attr('title', 'Click for details');
+      $(row).attr("title", "Click for details");
     },
-    pageLength: 10,
+    pageLength: 5,
     deferRender: true,
     processing: true,
     destroy: true,
@@ -308,7 +310,7 @@ function displayInst(d, showcolumns, div, ol) {
 // Set Highcharts global options
 Highcharts.setOptions({
   lang: {
-    thousandsSep: ','
+    thousandsSep: ","
   },
   colors: ["#B9D9EC", "#144175", "#F9A21C", "#266150", "#DE354C"]
 });
@@ -332,11 +334,11 @@ function getChartData(data, ratio) {
   xcat = xcat.filter((val, ind, arr) => arr.indexOf(val) === ind);
   // Create object to hold key-value pairs of occupation and ratio or shortage for charting
   let occupationCategories = {
-    'Blue-collar': { name: 'Blue-collar', data: [] },
-    'Health': { name: 'Health', data: [] },
-    'Management': { name: 'Management', data: [] },
-    'Protective services': { name: 'Protective services', data: [] },
-    'STEM': { name: 'STEM', data: [] }
+    "Blue-collar": { name: "Blue-collar", data: [] },
+    "Health": { name: "Health", data: [] },
+    "Management": { name: "Management", data: [] },
+    "Protective services": { name: "Protective services", data: [] },
+    "STEM": { name: "STEM", data: [] }
   };
   $.each(data, function (i, value) {
     let category = occupationCategories[value.Occ];
@@ -372,7 +374,7 @@ function drawChart(data = cbsa, xcat, ratio) {
 
   // vertical reference line - only used when showing credentials-to-jobs-ratio
   let refLine = [{
-    color: '#000000',
+    color: "#000000",
     zIndex: 5,
     width: 2,
     value: 1
@@ -391,24 +393,24 @@ function drawChart(data = cbsa, xcat, ratio) {
     ref = refLine;
     ttl = "Credentials-to-jobs ratio"; // title
     pf = '<td style="padding:0">&nbsp<b>{point.y:.2f}</b></td></tr>'; // point format
-    yf = '{value: , .1f}'; // y-axis format
-    ya = 'Alignment ratio'; // y-axis title
+    yf = "{value: , .1f}"; // y-axis format
+    ya = "Alignment ratio"; // y-axis title
     // Define mouseover function for chart title
     mo = function () {
       const chart = this
-      chart.title.on('mouseover', e => {
+      chart.title.on("mouseover", e => {
         chart.titleTooltip = this.renderer.label(
-          'Values less than one indicate a shortage in<br> credential production, values greater than <br> one indicate a surplus in credential production,<br> and values equal to one indicate perfect alignment <br> between credential production and occupational<br> demand. See table notes for more details.',
+          "Values less than one indicate a shortage in<br> credential production, values greater than <br> one indicate a surplus in credential production,<br> and values equal to one indicate perfect alignment <br> between credential production and occupational<br> demand. See table notes for more details.",
           200,
           150,
-          'rectangle'
+          "rectangle"
         )
           .css({
-            color: '#FFFFFF',
+            color: "#FFFFFF",
             fontSize: "10px"
           })
           .attr({
-            fill: 'rgba(0, 0, 0, 0.75)',
+            fill: "rgba(0, 0, 0, 0.75)",
             padding: 8,
             r: 4,
           })
@@ -416,7 +418,7 @@ function drawChart(data = cbsa, xcat, ratio) {
           .toFront()
       })
 
-      chart.title.on('mouseout', e => {
+      chart.title.on("mouseout", e => {
         if (chart.titleTooltip) {
           chart.titleTooltip.destroy()
         }
@@ -428,8 +430,8 @@ function drawChart(data = cbsa, xcat, ratio) {
     ttl = "Annual credential shortage"; // title
     ref = null; // no vertical reference
     pf = '<td style="padding:0">&nbsp<b>{point.y}</b></td></tr>'; // point format
-    yf = '{value: , .0f}'; // y-axis format
-    ya = 'Annual credential shortage'; // y-axis title
+    yf = "{value: , .0f}"; // y-axis format
+    ya = "Annual credential shortage"; // y-axis title
     mo = null // No mouseover necessary
   };
 
@@ -438,8 +440,9 @@ function drawChart(data = cbsa, xcat, ratio) {
       text: ttl
     },
     chart: {
-      type: 'bar',
+      type: "bar",
       marginTop: 150,
+      height: "100%",
       scrollablePlotArea: {
         minHeight: h,
         scrollPositionX: 1,
@@ -450,7 +453,7 @@ function drawChart(data = cbsa, xcat, ratio) {
     },
     yAxis: {
       title: {
-        text: ''
+        text: ""
       },
       offset: 5,
       opposite: true,
@@ -460,26 +463,26 @@ function drawChart(data = cbsa, xcat, ratio) {
       }
     },
     xAxis: {
-      type: 'category',
+      type: "category",
       title: {
-        text: ''
+        text: ""
       },
       categories: xcat,
       accessibility: {
-        rangeDescription: 'CBSA'
+        rangeDescription: "CBSA"
       }
     },
     tooltip: {
       headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
       pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
         pf,
-      footerFormat: '</table>',
+      footerFormat: "</table>",
       shared: false,
       useHTML: true
     },
     legend: {
       enabled: true,
-      verticalAlign: 'top'
+      verticalAlign: "top"
     },
     credits: {
       enabled: false
@@ -520,25 +523,25 @@ let cmp = function (x, y) {
 function displayDetail(d) {
   $("#table-prog").DataTable({
     initComplete: function () {
-      $('#table-prog thead select').remove();
+      $("#table-prog thead select").remove();
       this.api()
         .columns([0, 1, 2])
         .every(function () {
           let column = this;
 
           // Create select element
-          let select = document.createElement('select');
+          let select = document.createElement("select");
           select.name = "table-filter";
-          select.add(new Option('All'));
+          select.add(new Option("All"));
           column.header().append(select);
 
           // Apply listener for user change in value
-          select.addEventListener('change', function () {
+          select.addEventListener("change", function () {
             column
               .search(select.value, { exact: true })
               .draw();
           });
-          select.addEventListener('click', function (e) {
+          select.addEventListener("click", function (e) {
             e.stopPropagation();
           });
 
@@ -556,15 +559,15 @@ function displayDetail(d) {
       bottom2Start: {
         buttons: [
           {
-            extend: 'collection',
-            text: 'Export',
-            className: 'custom-html-collection',
-            buttons: ['copy', 'csv', 'excel', 'print']
+            extend: "collection",
+            text: "Export",
+            className: "custom-html-collection",
+            buttons: ["copy", "csv", "excel", "print"]
           }]
       },
       top2End: null,
-      topStart: 'search',
-      topEnd: 'pageLength'
+      topStart: "search",
+      topEnd: "pageLength"
     },
     // responsive: true,
     pageLength: 10,
@@ -587,25 +590,25 @@ function displayDetail(d) {
 function displayCBSADetail(d) {
   $("#table-cbsa-modal").DataTable({
     initComplete: function () {
-      $('#table-cbsa-modal thead select').remove();
+      $("#table-cbsa-modal thead select").remove();
       this.api()
         .columns([1, 2])
         .every(function () {
           let column = this;
 
           // Create select element
-          let select = document.createElement('select');
+          let select = document.createElement("select");
           select.name = "table-filter";
-          select.add(new Option('All'));
+          select.add(new Option("All"));
           column.header().append(select);
 
           // Apply listener for user change in value
-          select.addEventListener('change', function () {
+          select.addEventListener("change", function () {
             column
               .search(select.value, { exact: true })
               .draw();
           });
-          select.addEventListener('click', function (e) {
+          select.addEventListener("click", function (e) {
             e.stopPropagation();
           });
 
@@ -623,15 +626,15 @@ function displayCBSADetail(d) {
       bottom2Start: {
         buttons: [
           {
-            extend: 'collection',
-            text: 'Export',
-            className: 'custom-html-collection',
-            buttons: ['copy', 'csv', 'excel', 'print']
+            extend: "collection",
+            text: "Export",
+            className: "custom-html-collection",
+            buttons: ["copy", "csv", "excel", "print"]
           }]
       },
       top2End: null,
-      topStart: 'search',
-      topEnd: 'pageLength'
+      topStart: "search",
+      topEnd: "pageLength"
     },
     // responsive: true,
     pageLength: 10,
@@ -703,8 +706,8 @@ function showShortageTables(show = false, onlycbsa = false, onlyinst = false) {
 }
 // This function should only be called once when page loads
 function initializeSearchParams() {
-  $("#list-cbsa input:checkbox").prop('checked', true);
-  $("#list-occ input:checkbox").prop('checked', true);
+  $("#list-cbsa input:checkbox").prop("checked", true);
+  $("#list-occ input:checkbox").prop("checked", true);
   $("#radio-default").prop("checked", true);
 }
 
@@ -735,12 +738,12 @@ function showChart(show = false) {
 let dtInst = null; // has to be declared outside in order for it to persist
 function showModalData(div) {
   dtInst = $(div).DataTable();
-  $(div + ' tbody').on('click', 'tr', function () {
+  $(div + " tbody").on("click", "tr", function () {
     let rowData = dtInst.row(this).data();
     let progsToShow = progs.filter(obj => {
       return (obj.cbsa_name == rowData.cbsa_name & obj.instn_name == rowData.name & obj.occ_group == rowData.Occ)
     })
-    $("#modal-prog").modal('show');
+    $("#modal-prog").modal("show");
     displayDetail(progsToShow);
   });
 }
@@ -749,12 +752,12 @@ function showModalData(div) {
 let dtCBSA = null; // has to be declared outside in order for it to persist
 function showCBSAModalData(div) {
   dtCBSA = $(div).DataTable();
-  $(div + ' tbody').on('click', 'tr', function () {
+  $(div + " tbody").on("click", "tr", function () {
     let rowData = dtCBSA.row(this).data();
     let cbsaToShow = cbsaDtl.filter(obj => {
       return (obj.cbsa_name == rowData.cbsa_name & obj.occ_group == rowData.Occ)
     })
-    $("#modal-cbsa").modal('show');
+    $("#modal-cbsa").modal("show");
     displayCBSADetail(cbsaToShow);
   });
 }
@@ -777,13 +780,13 @@ function getSearchParams() {
   // 2. Check occupation clusters
   let occValues = [];
   $("#list-occ input[type=checkbox]:checked").each(function () {
-    occValues.push($(this).next('label').text());
+    occValues.push($(this).next("label").text());
   });
 
   // 3. Get CBSAs
   let cbsaValues = [];
   $("#list-cbsa input[type=checkbox]:checked").each(function () {
-    cbsaValues.push($(this).next('label').text());
+    cbsaValues.push($(this).next("label").text());
   });
   return {
     cbsaType: cbsaType,
@@ -895,7 +898,7 @@ function fillCBSADropdown() {
     return obj.cbsa_name
   });
 
-  cbsaNames = ['All metro areas'].concat(Array.from(new Set(cbsaNames)));
+  cbsaNames = ["All metro areas"].concat(Array.from(new Set(cbsaNames)));
   // Create dropdown element and fill 
   let list = $("#list-cbsa");
   $.each(cbsaNames, function (i, value) {
@@ -932,7 +935,7 @@ $(document).ready(function () {
   let shortageData = getChartData(data = dataToUse.cbsaData, ratio = false);
 
   // Events for tab navigation
-  $("#nav-abt").on('click', function () {
+  $("#nav-abt").on("click", function () {
     // show only items relevant to home tab
     showHome(true);
     showNoShortageTables(false);
@@ -940,7 +943,7 @@ $(document).ready(function () {
     // showSearchParams(false);
     showChart(false);
   });
-  // $("#nav-search").on('click', function () {
+  // $("#nav-search").on("click", function () {
   //   // show only search fields and controls
   //   // showSearchParams(true);
   //   showHome(false);
@@ -949,7 +952,7 @@ $(document).ready(function () {
   //   showShortageTables(false);
   // });
 
-  $("#nav-cbsa").on('click', function () {
+  $("#nav-cbsa").on("click", function () {
     // get data to show chart and cbsa tables
     // showSearchParams(false);
     showHome(false);
@@ -970,18 +973,18 @@ $(document).ready(function () {
 
     if (dataToUse.cbsaType != CBSA_NOSHORTAGE) {
       showShortageTables(show = true, onlycbsa = true, onlyinst = false);
-      displayCBSA(dataToUse.cbsaData, showcolumns = allCBSA, div = '#table-cbsa', ol = 5);
+      displayCBSA(dataToUse.cbsaData, showcolumns = allCBSA, div = "#table-cbsa", ol = 5);
       // Processing for pop up when data row is clicked
-      showCBSAModalData('#table-cbsa');
+      showCBSAModalData("#table-cbsa");
 
     } else {
       showNoShortageTables(show = true, onlycbsa = true, onlyinst = false);
-      displayCBSA(dataToUse.cbsaData, showcolumns = noshortageCBSA, div = '#table-cbsa-noshortage', ol = 4);
+      displayCBSA(dataToUse.cbsaData, showcolumns = noshortageCBSA, div = "#table-cbsa-noshortage", ol = 4);
       // Processing for pop up when data row is clicked
-      showCBSAModalData('#table-cbsa-noshortage');
+      showCBSAModalData("#table-cbsa-noshortage");
     }
   });
-  $("#nav-inst").on('click', function () {
+  $("#nav-inst").on("click", function () {
     // get data to show institution tables and provider details in popup
     // showSearchParams(false);
     showHome(false);
@@ -992,20 +995,20 @@ $(document).ready(function () {
 
     if (dataToUse.cbsaType != CBSA_NOSHORTAGE) {
       showShortageTables(show = true, onlycbsa = false, onlyinst = true);
-      displayInst(dataToUse.instData, showcolumns = allinst, div = '#table-inst', ol = [4, 7, 10]);
+      displayInst(dataToUse.instData, showcolumns = allinst, div = "#table-inst", ol = [4, 7, 10]);
       // Processing for pop up when data row is clicked
-      showModalData('#table-inst');
+      showModalData("#table-inst");
     } else {
       showNoShortageTables(show = true, onlycbsa = false, onlyinst = true);
-      displayInst(dataToUse.instData, showcolumns = noshortageinst, div = '#table-inst-noshortage', ol = [4, 7, 10]);
+      displayInst(dataToUse.instData, showcolumns = noshortageinst, div = "#table-inst-noshortage", ol = [4, 7, 10]);
       // Processing for pop up when data row is clicked
-      showModalData('#table-inst-noshortage');
+      showModalData("#table-inst-noshortage");
     }
   });
 
   // Events for HTML buttons
   // "Begin exploring" brings user to search page
-  $("#begin").on('click', function () {
+  $("#begin").on("click", function () {
     showHome(false);
     // showSearchParams(true);
   });
@@ -1017,14 +1020,14 @@ $(document).ready(function () {
     shortageData = getChartData(data = dataToUse.cbsaData, ratio = false);
 
     // trigger click on nav-cbsa instead of running all the relevant functions to show the CBSA tab resuls
-    $("#nav-cbsa").trigger('click');
+    $("#nav-cbsa").trigger("click");
   });
 
   // Events for chart radio buttons - triggers chart update
-  $("#radio-chart-align").on('click', function () {
+  $("#radio-chart-align").on("click", function () {
     drawChart(data = ratioData[1], xcat = ratioData[0], ttype = true);
   });
-  $("#radio-chart-shortage").on('click', function () {
+  $("#radio-chart-shortage").on("click", function () {
     let sumcheck = checkShortageData(shortageData);
     if (sumcheck > 0) {
       drawChart(data = shortageData[1], xcat = shortageData[0], ttype = false);
@@ -1043,7 +1046,7 @@ $(document).ready(function () {
     });
     // toggle to be unchecked for any matches to allow the user to select
     if (value.length > 0 & selection == 0) {
-      $("#list-cbsa input:checkbox").prop('checked', false);
+      $("#list-cbsa input:checkbox").prop("checked", false);
       // if user checks a CBSA then flag that a selection has been made
       $("#list-cbsa input:checkbox").change(function () {
         selection = 1;
@@ -1051,7 +1054,7 @@ $(document).ready(function () {
     }
     // if nothing has been selected: selection == 0 then check all CBSAs and show all
     else if (value.length == 0 & selection == 0) {
-      $("#list-cbsa input:checkbox").prop('checked', true);
+      $("#list-cbsa input:checkbox").prop("checked", true);
     } else if (selection == 1) {
       // do nothing - show list with all items
     }
@@ -1067,14 +1070,14 @@ $(document).ready(function () {
 
   $("#list-cbsa input:checkbox").change(function () {
     if ($(this).val() == 0) {
-      if (!$(this).prop('checked')) {
-        $("#list-cbsa input:checkbox").prop('checked', false);
+      if (!$(this).prop("checked")) {
+        $("#list-cbsa input:checkbox").prop("checked", false);
       }
-      else if ($(this).prop('checked')) {
-        $("#list-cbsa input:checkbox").prop('checked', true);
+      else if ($(this).prop("checked")) {
+        $("#list-cbsa input:checkbox").prop("checked", true);
       }
     } else {
-      $("#chk-cbsa-0").prop('checked', false);
+      $("#chk-cbsa-0").prop("checked", false);
     }
   });
   // If "All occupations" ("#chk_occ_0") in "Select occupational group(s)" is checked then all the individual occupations are checked
@@ -1082,14 +1085,14 @@ $(document).ready(function () {
 
   $("#list-occ input:checkbox").change(function () {
     if ($(this).val() == 0) {
-      if (!$(this).prop('checked')) {
-        $("#list-occ input:checkbox").prop('checked', false);
+      if (!$(this).prop("checked")) {
+        $("#list-occ input:checkbox").prop("checked", false);
       }
-      else if ($(this).prop('checked')) {
-        $("#list-occ input:checkbox").prop('checked', true);
+      else if ($(this).prop("checked")) {
+        $("#list-occ input:checkbox").prop("checked", true);
       }
     } else {
-      $("#chk_occ_0").prop('checked', false);
+      $("#chk_occ_0").prop("checked", false);
     }
   });
 
@@ -1097,7 +1100,7 @@ $(document).ready(function () {
   $('[data-bs-toggle="tooltip"]').each(function () {
     let tooltip = new bootstrap.Tooltip(this);
     // Attach click event to hide tooltip after a delay
-    $(this).on('click', function () {
+    $(this).on("click", function () {
       setTimeout(function () {
         tooltip.hide();
       }, 2000); // Delay in milliseconds
