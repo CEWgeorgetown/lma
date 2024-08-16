@@ -12,6 +12,11 @@ body {
     overflow-y: auto;
 }
 
+#list-cbsa-oc {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
 #list-occ {
     height: 200px;
     /* overflow-y: auto; */
@@ -65,6 +70,26 @@ th>select {
 
 .nav-link:hover {
     background-color: aqua;
+}
+
+#all-vis-select {
+    background-color: #EAF4F9;
+}
+
+#multi-select-button-cbsa {
+    background-color: #fff;
+}
+
+#multi-select-button-occ {
+    background-color: #fff;
+}
+
+#multi-select-list-cbsa {
+    width: 400px
+}
+
+#multi-select-list-occ {
+    width: 200px;
 }
 
 /* #tbl_inst {
