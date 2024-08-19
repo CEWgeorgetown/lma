@@ -1057,12 +1057,16 @@ function fillCBSADropdown() {
 
   let mlist = $("#multi-select-list-cbsa");
   mlist.empty();
+  let search = $("<input type='text' id='search-cbsa-vis' placeholder='Search metro area' class='form-control m-2'>");
+  mlist.append(search);
   $.each(cbsaNames, function (i, value) {
     let li = $("<li class='list-group-item'></li>");
     let input = $("<input class='form-check-input mx-2' type='checkbox' value='" + i + "' id='mchk-cbsa-" + i + "'>");
     let label = $("<label class='form-check-label' for='mchk-cbsa-" + i + "'>" + value + "</label>");
     li.append(input, label);
     mlist.append(li);
+    // let opt = $("<option value='" + i + "' id='mchk-cbsa-" + i + "'>" + value + "</option>");
+    // mlist.append(opt);
   });
 }
 
@@ -1293,7 +1297,7 @@ $(document).ready(function () {
 
   $("#search-cbsa-vis").on("keyup", function (e) {
     // e.stopPropagation();
-    $("#multi-select-button-cbsa").click();
+    // $("#multi-select-button-cbsa").click();
 
     let value = $(this).val().toLowerCase();
     // filter list as user types
