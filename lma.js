@@ -370,7 +370,6 @@ function getChartData(data, ratio) {
       })
     })
   })
-  // console.log(seriesData);
   return [xcat, seriesData];
 };
 
@@ -669,80 +668,6 @@ function displayCBSADetail(d) {
   });
 }
 
-// function to show/hide contents of Home tab
-// function showHome(show = true) {
-//   if (show) {
-//     $("#nav-abt").css("background-color", "#B9D9EC");
-//     // $("#nav-search").css("background-color", "");
-//     $("#nav-cbsa").css("background-color", "");
-//     $("#nav-inst").css("background-color", "");
-//     $("#about").show();
-//   } else {
-//     $("#nav-abt").css("background-color", "");
-//     $("#about").hide();
-//   }
-// }
-
-// // function to show/hide tables
-// function showNoShortageTables(show = false, onlycbsa = false, onlyinst = false) {
-//   if (show) {
-//     if (onlycbsa) {
-//       $("#div-tbl-inst-noshortage").hide();
-//       $("#div-tbl-cbsa-noshortage").show();
-//     } else if (onlyinst) {
-//       $("#div-tbl-cbsa-noshortage").hide();
-//       $("#div-tbl-inst-noshortage").show();
-//     } else {
-//       $("#div-tbl-cbsa-noshortage").show();
-//       $("#div-tbl-inst-noshortage").show();
-//     }
-//   } else {
-//     $("#div-tbl-cbsa-noshortage").hide();
-//     $("#div-tbl-inst-noshortage").hide();
-//   }
-// }
-
-// function showShortageTables(show = false, onlycbsa = false, onlyinst = false) {
-//   if (show) {
-//     if (onlycbsa) {
-//       $("#div-tbl-inst").hide();
-//       $("#div-tbl-cbsa").show();
-//     } else if (onlyinst) {
-//       $("#div-tbl-cbsa").hide();
-//       $("#div-tbl-inst").show();
-//     } else {
-//       $("#div-tbl-cbsa").show();
-//       $("#div-tbl-inst").show();
-//     }
-//   } else {
-//     $("#div-tbl-cbsa").hide();
-//     $("#div-tbl-inst").hide();
-//   }
-// }
-
-// function to show elements of search tab
-// function showSearchParams(show = false) {
-//   if (show) {
-//     // $("#nav-search").css("background-color", "aquamarine");
-//     $("#nav-cbsa").css("background-color", "");
-//     $("#nav-inst").css("background-color", "");
-//     $("#nav-abt").css("background-color", "");
-//     $("#search-params").show();
-//   } else {
-//     // $("#nav-search").css("background-color", "");
-//     $("#search-params").hide();
-//   }
-// }
-
-// function showChart(show = false) {
-//   $("#radio-chart-align").prop("checked", true);
-//   if (show) {
-//     $("#chart-col").show();
-//   } else {
-//     $("#chart-col").hide();
-//   }
-// }
-
 function toggleElements(about, cbsachart, shortage, noshortage, onlycbsa, onlyinst) {
   if (about) {
     $("#nav-abt").css("background-color", "#B9D9EC");
@@ -795,21 +720,20 @@ function toggleElements(about, cbsachart, shortage, noshortage, onlycbsa, onlyin
 // This function should only be called once when page loads
 function initializeSearchParams() {
   // initialize all cbsas to be checked
-  // $("#list-cbsa input:checkbox").prop("checked", true);
   // initialize some cbsas
-  $("#list-cbsa input:checkbox")[1].checked = true;
-  $("#list-cbsa input:checkbox")[8].checked = true;
-  $("#list-cbsa input:checkbox")[23].checked = true;
-  $("#list-cbsa input:checkbox")[31].checked = true;
-  $("#list-occ input:checkbox").prop("checked", true);
-  $("#radio-default").prop("checked", true);
+  // $("#list-cbsa input:checkbox")[1].checked = true;
+  // $("#list-cbsa input:checkbox")[8].checked = true;
+  // $("#list-cbsa input:checkbox")[23].checked = true;
+  // $("#list-cbsa input:checkbox")[31].checked = true;
+  // $("#list-occ input:checkbox").prop("checked", true);
+  // $("#radio-default").prop("checked", true);
 
-  $("#list-cbsa-oc input:checkbox")[1].checked = true;
-  $("#list-cbsa-oc input:checkbox")[8].checked = true;
-  $("#list-cbsa-oc input:checkbox")[23].checked = true;
-  $("#list-cbsa-oc input:checkbox")[31].checked = true;
-  $("#list-occ-oc input:checkbox").prop("checked", true);
-  $("#radio-default-oc").prop("checked", true);
+  // $("#list-cbsa-oc input:checkbox")[1].checked = true;
+  // $("#list-cbsa-oc input:checkbox")[8].checked = true;
+  // $("#list-cbsa-oc input:checkbox")[23].checked = true;
+  // $("#list-cbsa-oc input:checkbox")[31].checked = true;
+  // $("#list-occ-oc input:checkbox").prop("checked", true);
+  // $("#radio-default-oc").prop("checked", true);
 
   $("#multi-select-list-cbsa input:checkbox")[1].checked = true;
   $("#multi-select-list-cbsa input:checkbox")[8].checked = true;
@@ -931,14 +855,15 @@ function getSearchParamsVis() {
 
 function getDataForUpdate(vis, oc) {
 
-  let searchParams = undefined;
-  if (vis) {
-    searchParams = getSearchParamsVis();
-  } else if (oc) {
-    searchParams = getSearchParamsOC();
-  } else {
-    searchParams = getSearchParams();
-  }
+  // let searchParams = undefined;
+  // if (vis) {
+  //   searchParams = getSearchParamsVis();
+  // } else if (oc) {
+  //   searchParams = getSearchParamsOC();
+  // } else {
+  //   searchParams = getSearchParams();
+  // }
+  searchParams = getSearchParamsVis();
   let cbsaSubset = [];
   let instSubset = [];
   // let cbsaValues = null;
@@ -1080,48 +1005,36 @@ $(document).ready(function () {
 
   // INITIALIZE PAGE
   initializeSearchParams();
-  // 1. Only home/about text
-  // showHome(true);
-  // 2. Hide all controls, tables, and divs for charts and tables for initial page
-  // showNoShortageTables(false);
-  // showShortageTables(false);
-  // showSearchParams(false);
-  // showChart(false);
-  // $("#all-vis-select").hide();
+  // Hide all controls, tables, and divs for charts and tables for initial page
 
   toggleElements(true, false, false, false, false, false);
 
-  // 3. initialize data in case user goes straight to cbsa and provider tabs instead of search tab
-  let dataToUse = getDataForUpdate(false, false);
+  // initialize data in case user goes straight to cbsa and provider tabs instead of search tab
+  let dataToUse = getDataForUpdate(true, false);
   let ratioData = getChartData(data = dataToUse.cbsaData, ratio = true);
   let shortageData = getChartData(data = dataToUse.cbsaData, ratio = false);
 
+  // Events for HTML buttons
+  $("#btn-update-vis").on("click", function () {
+    dataToUse = getDataForUpdate(true, false);
+    ratioData = getChartData(data = dataToUse.cbsaData, ratio = true);
+    shortageData = getChartData(data = dataToUse.cbsaData, ratio = false);
+    // trigger click on nav - cbsa instead of running all the relevant functions to show the CBSA tab resuls
+    $("#nav-cbsa").trigger("click");
+  });
+  // "Begin exploring" brings user to search page
+  $("#begin").on("click", function () {
+    $("#nav-cbsa").trigger("click");
+    $("#btn-update-vis").trigger("click");
+  });
+
   // Events for tab navigation
   $("#nav-abt").on("click", function () {
-    // show only items relevant to home tab
-    // showHome(true);
-    // showNoShortageTables(false);
-    // showShortageTables(false);
-    // showSearchParams(false);
-    // showChart(false);
-    // $("#all-vis-select").hide();
     toggleElements(true, false, false, false, false, false);
-
   });
-  // $("#nav-search").on("click", function () {
-  //   // show only search fields and controls
-  //   // showSearchParams(true);
-  //   showHome(false);
-  //   showChart(false);
-  //   showNoShortageTables(false);
-  //   showShortageTables(false);
-  // });
 
   $("#nav-cbsa").on("click", function () {
     // get data to show chart and cbsa tables
-    // showSearchParams(false);
-    // showHome(false);
-
     $("#all-vis-select").show();
     $("#nav-cbsa").css("background-color", "#B9D9EC");
     $("#nav-inst").css("background-color", "");
@@ -1135,16 +1048,13 @@ $(document).ready(function () {
     */
 
     drawChart(data = ratioData[1], xcat = ratioData[0], ttype = true);
-    // showChart(true);
 
     if (dataToUse.cbsaType != CBSA_NOSHORTAGE) {
-      // showShortageTables(show = true, onlycbsa = true, onlyinst = false);
       toggleElements(false, true, true, false, true, false);
       displayCBSA(dataToUse.cbsaData, showcolumns = allCBSA, div = "#table-cbsa", ol = 5);
       // Processing for pop up when data row is clicked
       showCBSAModalData("#table-cbsa");
     } else {
-      // showNoShortageTables(show = true, onlycbsa = true, onlyinst = false);
       toggleElements(false, true, false, true, true, false);
       displayCBSA(dataToUse.cbsaData, showcolumns = noshortageCBSA, div = "#table-cbsa-noshortage", ol = 4);
       // Processing for pop up when data row is clicked
@@ -1162,13 +1072,11 @@ $(document).ready(function () {
     $("#nav-inst").css("background-color", "#B9D9EC");
 
     if (dataToUse.cbsaType != CBSA_NOSHORTAGE) {
-      // showShortageTables(show = true, onlycbsa = false, onlyinst = true);
       toggleElements(false, false, true, false, false, true);
       displayInst(dataToUse.instData, showcolumns = allinst, div = "#table-inst", ol = [4, 7, 10]);
       // Processing for pop up when data row is clicked
       showModalData("#table-inst");
     } else {
-      // showNoShortageTables(show = true, onlycbsa = false, onlyinst = true);
       toggleElements(false, false, false, true, false, true);
       displayInst(dataToUse.instData, showcolumns = noshortageinst, div = "#table-inst-noshortage", ol = [4, 7, 10]);
       // Processing for pop up when data row is clicked
@@ -1177,48 +1085,36 @@ $(document).ready(function () {
   });
 
   // Events for HTML buttons
-  // "Begin exploring" brings user to search page
-  // $("#begin").on("click", function () {
-  //   showHome(false);
-  //   // showSearchParams(true);
-  // });
+
   // "Update" button gets all the parameters from the search tab and shows the results on the CBSA tab
-  $("#btn-update").on("click", function () {
+  // $("#btn-update").on("click", function () {
 
-    dataToUse = getDataForUpdate(false, false);
-    ratioData = getChartData(data = dataToUse.cbsaData, ratio = true);
-    shortageData = getChartData(data = dataToUse.cbsaData, ratio = false);
+  //   dataToUse = getDataForUpdate(false, false);
+  //   ratioData = getChartData(data = dataToUse.cbsaData, ratio = true);
+  //   shortageData = getChartData(data = dataToUse.cbsaData, ratio = false);
 
-    // trigger click on nav-cbsa instead of running all the relevant functions to show the CBSA tab resuls
-    $("#nav-cbsa").trigger("click");
-  });
-  $("#btn-update-vis").on("click", function () {
-    dataToUse = getDataForUpdate(true, false);
-    ratioData = getChartData(data = dataToUse.cbsaData, ratio = true);
-    shortageData = getChartData(data = dataToUse.cbsaData, ratio = false);
-    // trigger click on nav - cbsa instead of running all the relevant functions to show the CBSA tab resuls
-    $("#nav-cbsa").trigger("click");
-  });
-  $("#btn-update-oc").on("click", function () {
-    dataToUse = getDataForUpdate(false, true);
-    ratioData = getChartData(data = dataToUse.cbsaData, ratio = true);
-    shortageData = getChartData(data = dataToUse.cbsaData, ratio = false);
-    // trigger click on nav - cbsa instead of running all the relevant functions to show the CBSA tab resuls
-    $("#nav-cbsa").trigger("click");
-  });
-
+  //   // trigger click on nav-cbsa instead of running all the relevant functions to show the CBSA tab resuls
+  //   $("#nav-cbsa").trigger("click");
+  // });
+  // $("#btn-update-oc").on("click", function () {
+  //   dataToUse = getDataForUpdate(false, true);
+  //   ratioData = getChartData(data = dataToUse.cbsaData, ratio = true);
+  //   shortageData = getChartData(data = dataToUse.cbsaData, ratio = false);
+  //   // trigger click on nav - cbsa instead of running all the relevant functions to show the CBSA tab resuls
+  //   $("#nav-cbsa").trigger("click");
+  // });
   // Events for chart radio buttons - triggers chart update
-  $("#radio-chart-align").on("click", function () {
-    drawChart(data = ratioData[1], xcat = ratioData[0], ttype = true);
-  });
-  $("#radio-chart-shortage").on("click", function () {
-    let sumcheck = checkShortageData(shortageData);
-    if (sumcheck > 0) {
-      drawChart(data = shortageData[1], xcat = shortageData[0], ttype = false);
-    } else {
-      drawChart(data = [], xcat = [], ttype = false);
-    }
-  });
+  // $("#radio-chart-align").on("click", function () {
+  //   drawChart(data = ratioData[1], xcat = ratioData[0], ttype = true);
+  // });
+  // $("#radio-chart-shortage").on("click", function () {
+  //   let sumcheck = checkShortageData(shortageData);
+  //   if (sumcheck > 0) {
+  //     drawChart(data = shortageData[1], xcat = shortageData[0], ttype = false);
+  //   } else {
+  //     drawChart(data = [], xcat = [], ttype = false);
+  //   }
+  // });
 
   // Events for dropdown
   $("#multi-select-button-cbsa").on("click", function () {
@@ -1252,48 +1148,48 @@ $(document).ready(function () {
 
   // Events for search box
   let selection = 0;
-  $("#search-cbsa-input").on("keyup", function () {
-    let value = $(this).val().toLowerCase();
-    // filter list as user types
-    $("#list-cbsa li").filter(function () {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-    });
-    // toggle to be unchecked for any matches to allow the user to select
-    if (value.length > 0 & selection == 0) {
-      $("#list-cbsa input:checkbox").prop("checked", false);
-      // if user checks a CBSA then flag that a selection has been made
-      $("#list-cbsa input:checkbox").change(function () {
-        selection = 1;
-      })
-    }
-    // if nothing has been selected: selection == 0 then check all CBSAs and show all
-    else if (value.length == 0 & selection == 0) {
-      $("#list-cbsa input:checkbox").prop("checked", true);
-    } else if (selection == 1) {
-      // do nothing - show list with all items
-    }
-  });
-  $("#search-cbsa-oc").on("keyup", function () {
-    let value = $(this).val().toLowerCase();
-    // filter list as user types
-    $("#list-cbsa-oc li").filter(function () {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-    });
-    // toggle to be unchecked for any matches to allow the user to select
-    if (value.length > 0 & selection == 0) {
-      $("#list-cbsa-oc input:checkbox").prop("checked", false);
-      // if user checks a CBSA then flag that a selection has been made
-      $("#list-cbsa-oc input:checkbox").change(function () {
-        selection = 1;
-      })
-    }
-    // if nothing has been selected: selection == 0 then check all CBSAs and show all
-    else if (value.length == 0 & selection == 0) {
-      $("#list-cbsa-oc input:checkbox").prop("checked", true);
-    } else if (selection == 1) {
-      // do nothing - show list with all items
-    }
-  });
+  // $("#search-cbsa-input").on("keyup", function () {
+  //   let value = $(this).val().toLowerCase();
+  //   // filter list as user types
+  //   $("#list-cbsa li").filter(function () {
+  //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+  //   });
+  //   // toggle to be unchecked for any matches to allow the user to select
+  //   if (value.length > 0 & selection == 0) {
+  //     $("#list-cbsa input:checkbox").prop("checked", false);
+  //     // if user checks a CBSA then flag that a selection has been made
+  //     $("#list-cbsa input:checkbox").change(function () {
+  //       selection = 1;
+  //     })
+  //   }
+  //   // if nothing has been selected: selection == 0 then check all CBSAs and show all
+  //   else if (value.length == 0 & selection == 0) {
+  //     $("#list-cbsa input:checkbox").prop("checked", true);
+  //   } else if (selection == 1) {
+  //     // do nothing - show list with all items
+  //   }
+  // });
+  // $("#search-cbsa-oc").on("keyup", function () {
+  //   let value = $(this).val().toLowerCase();
+  //   // filter list as user types
+  //   $("#list-cbsa-oc li").filter(function () {
+  //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+  //   });
+  //   // toggle to be unchecked for any matches to allow the user to select
+  //   if (value.length > 0 & selection == 0) {
+  //     $("#list-cbsa-oc input:checkbox").prop("checked", false);
+  //     // if user checks a CBSA then flag that a selection has been made
+  //     $("#list-cbsa-oc input:checkbox").change(function () {
+  //       selection = 1;
+  //     })
+  //   }
+  //   // if nothing has been selected: selection == 0 then check all CBSAs and show all
+  //   else if (value.length == 0 & selection == 0) {
+  //     $("#list-cbsa-oc input:checkbox").prop("checked", true);
+  //   } else if (selection == 1) {
+  //     // do nothing - show list with all items
+  //   }
+  // });
 
   $("#search-cbsa-vis").on("keyup", function (e) {
     // e.stopPropagation();
@@ -1328,59 +1224,59 @@ $(document).ready(function () {
   // If "All metro areas" ("#chk-cbsa-0") in "Select metro area" is checked then all the individual metros are checked
   // If it is unchecked then all the individual metros are unchecked
 
-  $("#list-cbsa input:checkbox").change(function () {
-    if ($(this).val() == 0) {
-      if (!$(this).prop("checked")) {
-        $("#list-cbsa input:checkbox").prop("checked", false);
-      }
-      else if ($(this).prop("checked")) {
-        $("#list-cbsa input:checkbox").prop("checked", true);
-      }
-    } else {
-      $("#chk-cbsa-0").prop("checked", false);
-    }
-  });
+  // $("#list-cbsa input:checkbox").change(function () {
+  //   if ($(this).val() == 0) {
+  //     if (!$(this).prop("checked")) {
+  //       $("#list-cbsa input:checkbox").prop("checked", false);
+  //     }
+  //     else if ($(this).prop("checked")) {
+  //       $("#list-cbsa input:checkbox").prop("checked", true);
+  //     }
+  //   } else {
+  //     $("#chk-cbsa-0").prop("checked", false);
+  //   }
+  // });
   // If "All occupations" ("#chk_occ_0") in "Select occupational group(s)" is checked then all the individual occupations are checked
   // If it is unchecked then all the individual occupations are unchecked
 
-  $("#list-occ input:checkbox").change(function () {
-    if ($(this).val() == 0) {
-      if (!$(this).prop("checked")) {
-        $("#list-occ input:checkbox").prop("checked", false);
-      }
-      else if ($(this).prop("checked")) {
-        $("#list-occ input:checkbox").prop("checked", true);
-      }
-    } else {
-      $("#chk-occ-0").prop("checked", false);
-    }
-  });
+  // $("#list-occ input:checkbox").change(function () {
+  //   if ($(this).val() == 0) {
+  //     if (!$(this).prop("checked")) {
+  //       $("#list-occ input:checkbox").prop("checked", false);
+  //     }
+  //     else if ($(this).prop("checked")) {
+  //       $("#list-occ input:checkbox").prop("checked", true);
+  //     }
+  //   } else {
+  //     $("#chk-occ-0").prop("checked", false);
+  //   }
+  // });
 
-  $("#list-cbsa-oc input:checkbox").change(function () {
-    if ($(this).val() == 0) {
-      if (!$(this).prop("checked")) {
-        $("#list-cbsa-oc input:checkbox").prop("checked", false);
-      }
-      else if ($(this).prop("checked")) {
-        $("#list-cbsa-oc input:checkbox").prop("checked", true);
-      }
-    } else {
-      $("#chk-oc-cbsa-0").prop("checked", false);
-    }
-  });
+  // $("#list-cbsa-oc input:checkbox").change(function () {
+  //   if ($(this).val() == 0) {
+  //     if (!$(this).prop("checked")) {
+  //       $("#list-cbsa-oc input:checkbox").prop("checked", false);
+  //     }
+  //     else if ($(this).prop("checked")) {
+  //       $("#list-cbsa-oc input:checkbox").prop("checked", true);
+  //     }
+  //   } else {
+  //     $("#chk-oc-cbsa-0").prop("checked", false);
+  //   }
+  // });
 
-  $("#list-occ-oc input:checkbox").change(function () {
-    if ($(this).val() == 0) {
-      if (!$(this).prop("checked")) {
-        $("#list-occ-oc input:checkbox").prop("checked", false);
-      }
-      else if ($(this).prop("checked")) {
-        $("#list-occ-oc input:checkbox").prop("checked", true);
-      }
-    } else {
-      $("#chk-oc-occ-0").prop("checked", false);
-    }
-  });
+  // $("#list-occ-oc input:checkbox").change(function () {
+  //   if ($(this).val() == 0) {
+  //     if (!$(this).prop("checked")) {
+  //       $("#list-occ-oc input:checkbox").prop("checked", false);
+  //     }
+  //     else if ($(this).prop("checked")) {
+  //       $("#list-occ-oc input:checkbox").prop("checked", true);
+  //     }
+  //   } else {
+  //     $("#chk-oc-occ-0").prop("checked", false);
+  //   }
+  // });
   // Events for tooltips on table headers
   $('[data-bs-toggle="tooltip"]').each(function () {
     let tooltip = new bootstrap.Tooltip(this);

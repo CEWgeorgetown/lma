@@ -76,86 +76,15 @@
         </li>
       </ul>
     </div>
-    <!-- <div class="row" id="search-params">
-      <div class="col-4 pt-3">
-
-        <b>Select metro area(s)</b>
-        <input type="text" id="search-cbsa-input" placeholder="Search metro area" class="form-control">
-        <ul class="list-group pt-1" id="list-cbsa"></ul>
-      </div>
-      <div class="col-3 pt-3">
-        <b>Select alignment criteria</b>
-        <div class="pt-3 pb-2">
-          <div class="form-check ">
-            <input class="form-check-input" type="radio" name="flexRadiocbsa" id="radio-default" value="0">
-            <label class="form-check-label" for="radio-default">
-              All metro areas
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="flexRadiocbsa" id="radio-shortage" value="1">
-            <label class="form-check-label" for="radio-shortage">
-              Metro areas with credential shortages
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="flexRadiocbsa" id="radio-no-shortage" value="2">
-            <label class="form-check-label" for="radio-no-shortage">
-              Metro areas without credential shortages
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="col-3">
-        <div id="list-occ">
-          <div class="row pt-3">
-            <b>Select occupational group(s)</b>
-            <div class="col pt-4">
-              <ul class="list-group">
-                <li class="list-group-item">
-                  <input class="form-check-input me-1" type="checkbox" value="0" id="chk-occ0">
-                  <label class="form-check-label" for="chk-occ0">All occupations</label>
-                </li>
-                <li class="list-group-item">
-                  <input class="form-check-input me-1" type="checkbox" value="4" id="chk-occ4">
-                  <label class="form-check-label" for="chk-occ4">Blue-collar</label>
-                </li>
-                <li class="list-group-item">
-                  <input class="form-check-input me-1" type="checkbox" value="5" id="chk-occ5">
-                  <label class="form-check-label" for="chk-occ5">Health</label>
-                </li>
-                <li class="list-group-item">
-                  <input class="form-check-input me-1" type="checkbox" value="1" id="chk-occ1">
-                  <label class="form-check-label" for="chk-occ1">Management</label>
-                </li>
-                <li class="list-group-item">
-                  <input class="form-check-input me-1" type="checkbox" value="3" id="chk-occ3">
-                  <label class="form-check-label" for="chk-occ3">Protective services</label>
-                </li>
-                <li class="list-group-item">
-                  <input class="form-check-input me-1" type="checkbox" value="2" id="chk-occ2">
-                  <label class="form-check-label" for="chk-occ2">STEM</label>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="pt-5 mt-5">
-          <button type="button" class="btn btn-primary" id="btn-update">Update</button>
-        </div>
-      </div>
-    </div>
-    <hr> -->
 
     <div id="all-vis">
       <div id="all-vis-select">
         <div class="d-inline-flex flex-row" id="search-params-vis">
-          <button type="button" class="btn btn-primary m-2" data-bs-toggle="offcanvas" data-bs-target="#exploreSearch"
-            aria-controls="exploreSearch">Explore/search</button>
+          <button type="button" class="btn btn-primary m-2" aria-controls="exploreSearch">Explore/search</button>
+          <!-- <button type="button" class="btn btn-primary m-2" data-bs-toggle="offcanvas" data-bs-target="#exploreSearch"
+            aria-controls="exploreSearch">Explore/search</button> -->
 
-          <div class="offcanvas offcanvas-start" tabindex="-1" id="exploreSearch" aria-labelledby="exploreSearchLabel">
+          <!-- <div class="offcanvas offcanvas-start" tabindex="-1" id="exploreSearch" aria-labelledby="exploreSearchLabel">
             <div class="offcanvas-header">
               <h5 class="offcanvas-title" id="exploreSearchLabel">Explore/search</h5>
               <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -228,10 +157,9 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="dropdown">
-            <!-- <input type="text" id="search-cbsa-vis" placeholder="Search metro area" class="form-control m-2"> -->
             <button class="btn btn-body dropdown-toggle m-2" type="button" id="multi-select-button-cbsa"
               data-bs-toggle="dropdown" aria-expanded="false">
               Select a metro area
@@ -239,13 +167,9 @@
             <ul class="dropdown-menu" aria-labelledby="multi-select-button" id="multi-select-list-cbsa">
             </ul>
           </div>
-          <!-- <label>Select a metro area</label>
-          <select id="multi-select-list-cbsa" multiple multiselect-search="true" multiselect-select-all="true">
-          </select> -->
-
           <select class="form-select m-2" id="select-alignment-vis">
             <option>Select alignment criteria:</option>
-            <option value="0" selected>All metro areas</option>
+            <option value="0" selected>Metro area with and without credential shortages</option>
             <option value="1">Metro area with credential shortages</option>
             <option value="2">Metro area without credential shortages</option>
           </select>
@@ -309,7 +233,6 @@
               <table id="table-cbsa" class="display" style="width:100%">
                 <thead>
                   <tr>
-                    <!-- <th colspan="5"></th> -->
                     <th colspan="2" data-dt-order="disable"></th>
                     <th colspan="2" data-dt-order="disable"><span class="spdtl">See notes below the table for guidance
                         on
@@ -372,7 +295,6 @@
               <table id="table-cbsa-noshortage" class="display" style="width:100%">
                 <thead>
                   <tr>
-                    <!-- <th colspan="4"></th> -->
                     <th colspan="2" data-dt-order="disable"></th>
                     <th colspan="1" data-dt-order="disable"><span class="spdtl">See notes below the table for guidance
                         on
@@ -485,7 +407,6 @@
                   data-bs-title="Based on its current production share of credentials <b>aligned with high-paying occupations</b> in the occupational group, provider would <b>need to increase production of these credentials by x</b> to address the metro area’s credential shortage. <em>See footnote for details.</em>">
                   Provider’s potential contribution to addressing credential shortage<sup>&dagger;1</sup> <br>
                 </th>
-                <!-- <th>Measure 2</th> -->
               </tr>
             </thead>
             <tbody></tbody>
@@ -592,10 +513,6 @@
               <p>The tool allows users to identify where metro areas will need to increase their middle-skills
                 credential production to meet projected local workforce demand. It also provides information about how
                 many more credentials each provider would need to produce to address local shortages.</p>
-              <!-- <p>An accompanying document, <a href="GUCEW_High-Paying Summary_Mar-12-2024.pdf"><em>Missed
-                    Opportunities</em></a>, describes findings from the Georgetown University Center on Education and
-                the Workforce’s analysis of the underlying data.</p> -->
-
             </div>
           </div>
         </div>
@@ -691,12 +608,11 @@
         </div>
         <div class="accordion-item">
           <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-              data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+            <button class="accordion-button collapsed" type="button" id="begin" aria-controls="collapseFour">
               <strong>Begin exploring/search</strong>
             </button>
           </h2>
-          <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionAbout">
+          <!-- <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionAbout">
             <div class="accordion-body">
               <div class="row" id="search-params">
                 <div class="col-4 pt-3">
@@ -770,7 +686,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
