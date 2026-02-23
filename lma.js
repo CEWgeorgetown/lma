@@ -1104,17 +1104,17 @@ $(document).ready(function () {
   //   $("#nav-cbsa").trigger("click");
   // });
   // Events for chart radio buttons - triggers chart update
-  $("#radio-chart-align").on("click", function () {
-    drawChart(data = ratioData[1], xcat = ratioData[0], ttype = true);
-  });
-  $("#radio-chart-shortage").on("click", function () {
-    let sumcheck = checkShortageData(shortageData);
-    if (sumcheck > 0) {
-      drawChart(data = shortageData[1], xcat = shortageData[0], ttype = false);
-    } else {
-      drawChart(data = [], xcat = [], ttype = false);
-    }
-  });
+  // $("#radio-chart-align").on("click", function () {
+  //   drawChart(data = ratioData[1], xcat = ratioData[0], ttype = true);
+  // });
+  // $("#radio-chart-shortage").on("click", function () {
+  //   let sumcheck = checkShortageData(shortageData);
+  //   if (sumcheck > 0) {
+  //     drawChart(data = shortageData[1], xcat = shortageData[0], ttype = false);
+  //   } else {
+  //     drawChart(data = [], xcat = [], ttype = false);
+  //   }
+  // });
 
   // Events for dropdown
   $("#multi-select-button-cbsa").on("click", function () {
@@ -1288,4 +1288,5 @@ $(document).ready(function () {
     });
   });
 });
+
 
